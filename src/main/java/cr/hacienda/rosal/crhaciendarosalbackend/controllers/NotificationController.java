@@ -1,9 +1,7 @@
 package cr.hacienda.rosal.crhaciendarosalbackend.controllers;
 
 import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
-import cr.hacienda.rosal.crhaciendarosalbackend.services.INotificationService;
 import cr.hacienda.rosal.crhaciendarosalbackend.utils.NotificationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +13,7 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    private INotificationService notificationService;
-    private NotificationUtil notificationUtil;
+    NotificationUtil notificationUtil = new NotificationUtil();
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS
@@ -75,15 +72,5 @@ public class NotificationController {
     public ResponseEntity<Void> sendMessageToOne(String message, ResidentCredentials residentCredentials){
         //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
         return null;
-    }
-
-    @Autowired
-    public void setNotificationService(INotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
-
-    @Autowired
-    public void setNotificationUtil(NotificationUtil notificationUtil) {
-        this.notificationUtil = notificationUtil;
     }
 }

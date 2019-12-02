@@ -12,7 +12,7 @@ import java.util.List;
 public class NotificationServiceImpl implements INotificationService {
 
     @Autowired
-    private ResidentRepository residentRepository;
+    ResidentRepository residentRepository;
 
     @Override
     public void addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList) {

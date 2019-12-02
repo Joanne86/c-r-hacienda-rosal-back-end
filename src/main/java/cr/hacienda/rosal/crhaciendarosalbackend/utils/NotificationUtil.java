@@ -4,11 +4,9 @@ import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class NotificationUtil {
 
 
