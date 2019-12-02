@@ -1,7 +1,8 @@
 package cr.hacienda.rosal.crhaciendarosalbackend.controllers;
 
 import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
-import cr.hacienda.rosal.crhaciendarosalbackend.utils.NotificationUtil;
+import cr.hacienda.rosal.crhaciendarosalbackend.services.INotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +14,19 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    NotificationUtil notificationUtil = new NotificationUtil();
+    @Autowired
+    INotificationService notificationService;
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS
      * @param residentCredentialsList lista de residentes
      * @return
      */
-    @PostMapping ("/add-all-numbers")
+    @PostMapping("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList){
         //poner try
         //notificationService.save(residentCredentialsList);
-        notificationUtil.addAllNumbers(residentCredentialsList);
+        notificationService.addAllNumbers(residentCredentialsList);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
