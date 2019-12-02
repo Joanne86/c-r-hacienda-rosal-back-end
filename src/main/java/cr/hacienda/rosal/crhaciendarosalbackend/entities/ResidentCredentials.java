@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.crhaciendarosalbackend.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -8,7 +9,9 @@ import javax.persistence.Table;
 public class ResidentCredentials {
 
     private int id;
+    @Column
     private String name;
+    @Column (name = "number_cellphone")
     private String numberCellphone;
 
     public int getId() {

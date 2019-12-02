@@ -1,6 +1,10 @@
 package cr.hacienda.rosal.crhaciendarosalbackend.controllers;
 
 import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
+import cr.hacienda.rosal.crhaciendarosalbackend.services.INotificationService;
+import cr.hacienda.rosal.crhaciendarosalbackend.utils.NotificationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,22 +15,25 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificationController {
 
+    private INotificationService notificationService;
+    private NotificationUtil notificationUtil;
+
     /**
-     * Metodo que agrega subscribe todos los numeros del conjunto residencial a aws SNS
-     * @param residentCredentialsList
+     * Metodo que agrega todos los numeros del conjunto residencial a aws SNS
+     * @param residentCredentialsList lista de residentes
      * @return
      */
     @PostMapping ("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList){
-        //recibir una lista de objetos con:
-        //guardar en base de datos con los nombres y numero de casa
-        //publicar en sns cada numero
-        return null;
+        //poner try
+        //notificationService.save(residentCredentialsList);
+        notificationUtil.addAllNumbers(residentCredentialsList);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * Metodo que agrega los numeros de los deudores del conjunto a SNS
-     * @param residentCredentialsList
+     * @param residentCredentialsList lista de residentes morosos
      * @return
      */
     @PostMapping ("/add-debtors-numbers")
@@ -39,7 +46,7 @@ public class NotificationController {
 
     /**
      * Metodo que envia un mensaje igual a todos los residentes del conjunto
-     * @param message
+     * @param message cuerpo del mensaje
      * @return
      */
     @PostMapping ("/send-message-to-all")
@@ -65,8 +72,18 @@ public class NotificationController {
      * @return
      */
     @PostMapping ("/send-message-to-one")
-    public ResponseEntity<Void> sendMessageToOne(String message){
+    public ResponseEntity<Void> sendMessageToOne(String message, ResidentCredentials residentCredentials){
         //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
         return null;
+    }
+
+    @Autowired
+    public void setNotificationService(INotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @Autowired
+    public void setNotificationUtil(NotificationUtil notificationUtil) {
+        this.notificationUtil = notificationUtil;
     }
 }
