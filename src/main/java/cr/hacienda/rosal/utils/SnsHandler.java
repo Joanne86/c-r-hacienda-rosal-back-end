@@ -1,4 +1,4 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.utils;
+package cr.hacienda.rosal.utils;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -6,10 +6,9 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.*;
-import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
+import cr.hacienda.rosal.entities.ResidentCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

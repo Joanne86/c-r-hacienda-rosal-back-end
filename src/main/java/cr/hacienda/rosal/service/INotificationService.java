@@ -1,6 +1,6 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.services;
+package cr.hacienda.rosal.service;
 
-import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
+import cr.hacienda.rosal.entities.ResidentCredentials;
 
 import java.util.List;
 

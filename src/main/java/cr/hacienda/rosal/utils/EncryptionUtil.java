@@ -1,4 +1,4 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.utils;
+package cr.hacienda.rosal.utils;
 
 import java.util.Base64;
 

@@ -1,4 +1,4 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.entities;
+package cr.hacienda.rosal.entities;
 
 import javax.persistence.*;
 

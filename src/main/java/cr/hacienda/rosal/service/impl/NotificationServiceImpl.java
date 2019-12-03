@@ -1,16 +1,15 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.services.impl;
+package cr.hacienda.rosal.service.impl;
 
-import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
-import cr.hacienda.rosal.crhaciendarosalbackend.repositories.ResidentRepository;
-import cr.hacienda.rosal.crhaciendarosalbackend.services.INotificationService;
-import cr.hacienda.rosal.crhaciendarosalbackend.utils.EncryptionUtil;
-import cr.hacienda.rosal.crhaciendarosalbackend.utils.NotificationUtil;
-import cr.hacienda.rosal.crhaciendarosalbackend.utils.SnsHandler;
+import cr.hacienda.rosal.entities.ResidentCredentials;
+import cr.hacienda.rosal.repository.ResidentRepository;
+import cr.hacienda.rosal.service.INotificationService;
+import cr.hacienda.rosal.utils.EncryptionUtil;
+import cr.hacienda.rosal.utils.SnsHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     private static String ERROR_PUBLISH_MESSAGE = "ocurrrio un error al enviar mensaje";
 
-    Logger logger = LoggerFactory.getLogger(NotificationUtil.class);
+    Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
     @Override
     public void addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList) {
@@ -47,7 +46,7 @@ public class NotificationServiceImpl implements INotificationService {
         //residentRepository.saveAll(residentCredentialsList);
     }
 
-    public NotificationServiceImpl(){
+    public void initNotification(){
         this.awsTopicAllResidents = EncryptionUtil.decode(awsTopicAllResidents);
         this.accessKey = EncryptionUtil.decode(accessKey);
         this.secretKey = EncryptionUtil.decode(secretKey);
@@ -76,8 +75,9 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void addAllNumbers(List<ResidentCredentials> residentCredentialsList){
         try {
+            initNotification();
             SnsHandler bdbSnSHandler = new SnsHandler(accessKey, secretKey);
-            //bdbSnSHandler.addNumbers(awsTopicAllResidents, residentCredentialsList);
+            bdbSnSHandler.addNumbers(awsTopicAllResidents, residentCredentialsList);
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de todo el conjunto");
         }
@@ -90,24 +90,5 @@ public class NotificationServiceImpl implements INotificationService {
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de los deudores");
         }
-    }
-
-    public void setGetAwsTopicDebtors(String getAwsTopicDebtors) {
-        this.getAwsTopicDebtors = getAwsTopicDebtors;
-    }
-
-
-    public void setAwsTopicAllResidents(String awsTopicAllResidents) {
-        this.awsTopicAllResidents = awsTopicAllResidents;
-    }
-
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
     }
 }

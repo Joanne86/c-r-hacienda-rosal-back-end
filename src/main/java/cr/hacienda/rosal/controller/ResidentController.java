@@ -1,4 +1,4 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.controllers;
+package cr.hacienda.rosal.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

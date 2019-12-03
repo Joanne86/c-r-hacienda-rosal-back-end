@@ -1,4 +1,4 @@
-package cr.hacienda.rosal.crhaciendarosalbackend;
+package cr.hacienda.rosal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

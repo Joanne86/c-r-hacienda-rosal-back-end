@@ -1,7 +1,7 @@
-package cr.hacienda.rosal.crhaciendarosalbackend.controllers;
+package cr.hacienda.rosal.controller;
 
-import cr.hacienda.rosal.crhaciendarosalbackend.entities.ResidentCredentials;
-import cr.hacienda.rosal.crhaciendarosalbackend.services.INotificationService;
+import cr.hacienda.rosal.entities.ResidentCredentials;
+import cr.hacienda.rosal.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificationController {
 
+
     @Autowired
     INotificationService notificationService;
 
@@ -22,8 +23,10 @@ public class NotificationController {
      * @param residentCredentialsList lista de residentes
      * @return
      */
+
+
     @PostMapping("/add-all-numbers")
-    public ResponseEntity<Void> addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList){
+    public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody List<ResidentCredentials> residentCredentialsList){
         //poner try
         //notificationService.save(residentCredentialsList);
         notificationService.addAllNumbers(residentCredentialsList);
@@ -35,8 +38,9 @@ public class NotificationController {
      * @param residentCredentialsList lista de residentes morosos
      * @return
      */
+
     @PostMapping ("/add-debtors-numbers")
-    public ResponseEntity<Void> addDebtorsNumbers(List<ResidentCredentials> residentCredentialsList){
+    public ResponseEntity<Void> addDebtorsNumbers(@RequestBody List<ResidentCredentials> residentCredentialsList){
         //recibir una lista de objetos con:
         //guardar en base de datos con los nombres y numero de casa
         //publicar en sns(Deudores) cada numero
@@ -48,8 +52,10 @@ public class NotificationController {
      * @param message cuerpo del mensaje
      * @return
      */
+
+
     @PostMapping ("/send-message-to-all")
-    public ResponseEntity<Void> sendMessageToAll(String message){
+    public ResponseEntity<Void> sendMessageToAll(@RequestParam String message){
         //se tiene que tener los numeros ya montados en el topic
         return null;
     }
@@ -59,8 +65,9 @@ public class NotificationController {
      * @param message
      * @return
      */
+
     @PostMapping ("/send-message-to-debtors")
-    public ResponseEntity<Void> sendMessageToDebtors(String message){
+    public ResponseEntity<Void> sendMessageToDebtors(@RequestParam String message){
         //se tiene que tener los numeros ya montados en el topic
         return null;
     }
@@ -70,8 +77,10 @@ public class NotificationController {
      * @param message
      * @return
      */
+
+
     @PostMapping ("/send-message-to-one")
-    public ResponseEntity<Void> sendMessageToOne(String message, ResidentCredentials residentCredentials){
+    public ResponseEntity<Void> sendMessageToOne(@RequestParam  String message, @RequestBody ResidentCredentials residentCredentials){
         //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
         return null;
     }
