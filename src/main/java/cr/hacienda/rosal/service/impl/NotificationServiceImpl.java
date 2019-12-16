@@ -16,15 +16,16 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements INotificationService {
 
+    Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
+
     @Autowired
     ResidentRepository residentRepository;
-
 
     @Value("${arn.topic.all.residents}")
     private String awsTopicAllResidents;
 
     @Value("${arn.topic.debtors.residents}")
-    private String getAwsTopicDebtors;
+    private String awsTopicDebtors;
 
     @Value("${access.key}")
     private String accessKey;
@@ -32,41 +33,33 @@ public class NotificationServiceImpl implements INotificationService {
     @Value("${secret.key}")
     private String secretKey;
 
-    private static String ERROR_PUBLISH_MESSAGE = "ocurrrio un error al enviar mensaje";
+    private static String ERROR_PUBLISH_MESSAGE = "Ocurrrio un error al enviar mensaje";
+    private static String PREFIX_MESSAGE_TO_ALL = "Hacienda el Rosal te informa que ";
 
-    Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
-
-    @Override
-    public void addNumbersToGeneralMessage(List<ResidentCredentials> residentCredentialsList) {
-
-    }
+    private  SnsHandler snSHandler;
 
     @Override
     public void save(Iterable<ResidentCredentials> residentCredentialsList) {
-        //residentRepository.saveAll(residentCredentialsList);
-    }
-
-    public void initNotification(){
-        this.awsTopicAllResidents = EncryptionUtil.decode(awsTopicAllResidents);
-        this.accessKey = EncryptionUtil.decode(accessKey);
-        this.secretKey = EncryptionUtil.decode(secretKey);
+        logger.info("Guardando en base de datos los numeros de telefono de los residentes");
+        residentRepository.saveAll(residentCredentialsList);
     }
 
     @Override
     public void sendMessageToAll(String message) {
-        try {
-            SnsHandler bdbSnSHandler = new SnsHandler(accessKey, secretKey);
-            bdbSnSHandler.createPublishToTopic(awsTopicAllResidents, message);
-        } catch (Exception e) {
-            logger.error(ERROR_PUBLISH_MESSAGE);
-        }
+        setupSnSHandler();
+        logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", message);
+        this.snSHandler.createPublishToTopic(awsTopicAllResidents, message);
     }
 
+    /**
+     * ARREGLAR MIRAR COMO ENVIAR A UNO SOLO
+     * @param message
+     */
     @Override
     public void sendMessageToOne(String message) {
         try {
-            SnsHandler bdbSnSHandler = new SnsHandler(accessKey, secretKey);
-            bdbSnSHandler.createPublishToTopic(awsTopicAllResidents, message);
+            setupSnSHandler();
+            this.snSHandler.createPublishToTopic(awsTopicAllResidents, message);
         } catch (Exception e) {
             logger.error(ERROR_PUBLISH_MESSAGE);
         }
@@ -75,20 +68,39 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void addAllNumbers(List<ResidentCredentials> residentCredentialsList){
         try {
-            initNotification();
-            SnsHandler bdbSnSHandler = new SnsHandler(accessKey, secretKey);
-            bdbSnSHandler.addNumbers(awsTopicAllResidents, residentCredentialsList);
+            setupNotification(this.awsTopicAllResidents);
+            setupSnSHandler();
+            if(this.snSHandler != null){
+                this.snSHandler.addNumbers(this.awsTopicAllResidents, residentCredentialsList);
+            }
         } catch (Exception e) {
-            logger.error("ocurrio un error al agregar los numeros de todo el conjunto");
+            logger.error("ocurrio un error al agregar los numeros de telefono de todo el conjunto");
         }
     }
     @Override
     public void addDebtorsNumbers(List<ResidentCredentials> residentCredentialsList){
         try {
-            SnsHandler bdbSnSHandler = new SnsHandler(accessKey, secretKey);
-            bdbSnSHandler.addNumbers(getAwsTopicDebtors, residentCredentialsList);
+            setupNotification(this.awsTopicDebtors);
+            setupSnSHandler();
+            this.snSHandler.addNumbers(this.awsTopicDebtors, residentCredentialsList);
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de los deudores");
+        }
+    }
+
+    private void setupNotification(String arnTopic){
+        logger.info("Trayendo datos de conexion...");
+        this.awsTopicAllResidents = EncryptionUtil.decode(arnTopic);
+        this.accessKey = EncryptionUtil.decode(accessKey);
+        this.secretKey = EncryptionUtil.decode(secretKey);
+    }
+
+    private  void setupSnSHandler(){
+        try {
+            logger.info("Estableciendo conexion con topic");
+            this.snSHandler = new SnsHandler(accessKey, secretKey);
+        } catch (Exception e) {
+            logger.error(ERROR_PUBLISH_MESSAGE);
         }
     }
 }

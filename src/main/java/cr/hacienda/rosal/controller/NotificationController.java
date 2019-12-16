@@ -28,7 +28,7 @@ public class NotificationController {
     @PostMapping("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody List<ResidentCredentials> residentCredentialsList){
         //poner try
-        //notificationService.save(residentCredentialsList);
+        notificationService.save(residentCredentialsList);
         notificationService.addAllNumbers(residentCredentialsList);
         return new ResponseEntity<>(HttpStatus.OK);
     }

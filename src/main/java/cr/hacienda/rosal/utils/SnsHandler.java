@@ -33,15 +33,14 @@ public class SnsHandler {
      */
     public void createPublishToTopic(String topicArn, String msg) {
         PublishRequest publishRequest = new PublishRequest(topicArn, msg);
-        this.sendTopic(publishRequest);
+        this.sendMessageToTopic(publishRequest);
     }
 
-    private String sendTopic(PublishRequest publishRequest) {
+    private String sendMessageToTopic(PublishRequest publishRequest) {
         AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
         snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
         PublishResult publishResult = snsClient.publish(publishRequest);
         return publishResult.getMessageId();
-
     }
 
     public void showNumbers(){
@@ -56,7 +55,9 @@ public class SnsHandler {
     public void addNumbers(String awsTopic, List<ResidentCredentials> residentCredentialsList){
         AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
         snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+        logger.info("Agregando todos los numeros de telefono del conjunto");
         for (ResidentCredentials listNumbers: residentCredentialsList){
+            logger.info("numero: {}", listNumbers.getNumberCellphone());
             subscribeToTopic(snsClient, awsTopic, "sms", listNumbers.getNumberCellphone());
         }
     }
