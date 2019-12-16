@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.service.impl;
 
+import cr.hacienda.rosal.dto.MessageDto;
 import cr.hacienda.rosal.entities.ResidentCredentials;
 import cr.hacienda.rosal.repository.ResidentRepository;
 import cr.hacienda.rosal.service.INotificationService;
@@ -24,14 +25,20 @@ public class NotificationServiceImpl implements INotificationService {
     @Value("${arn.topic.all.residents}")
     private String awsTopicAllResidents;
 
+    private String awsTopicAllResidentsDec;
+
     @Value("${arn.topic.debtors.residents}")
     private String awsTopicDebtors;
 
     @Value("${access.key}")
     private String accessKey;
 
+    private String accessKeyDec;
+
     @Value("${secret.key}")
     private String secretKey;
+
+    private String secretKeyDec;
 
     private static String ERROR_PUBLISH_MESSAGE = "Ocurrrio un error al enviar mensaje";
     private static String PREFIX_MESSAGE_TO_ALL = "Hacienda el Rosal te informa que ";
@@ -48,20 +55,17 @@ public class NotificationServiceImpl implements INotificationService {
     public void sendMessageToAll(String message) {
         setupSnSHandler();
         logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", message);
-        this.snSHandler.createPublishToTopic(awsTopicAllResidents, message);
+        this.snSHandler.createPublishToTopic(awsTopicAllResidentsDec, message);
     }
 
-    /**
-     * ARREGLAR MIRAR COMO ENVIAR A UNO SOLO
-     * @param message
-     */
     @Override
-    public void sendMessageToOne(String message) {
+    public void sendMessageToOne(MessageDto messageDto) {
         try {
+            setupNotification(this.awsTopicAllResidents);
             setupSnSHandler();
-            this.snSHandler.createPublishToTopic(awsTopicAllResidents, message);
+            this.snSHandler.sendMessageToOne(messageDto.getMessage(), messageDto.getPhoneNumber());
         } catch (Exception e) {
-            logger.error(ERROR_PUBLISH_MESSAGE);
+            logger.error("error: {} message: {}", ERROR_PUBLISH_MESSAGE, e.getMessage());
         }
     }
 
@@ -71,7 +75,7 @@ public class NotificationServiceImpl implements INotificationService {
             setupNotification(this.awsTopicAllResidents);
             setupSnSHandler();
             if(this.snSHandler != null){
-                this.snSHandler.addNumbers(this.awsTopicAllResidents, residentCredentialsList);
+                this.snSHandler.addNumbers(this.awsTopicAllResidentsDec, residentCredentialsList);
             }
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de telefono de todo el conjunto");
@@ -90,15 +94,15 @@ public class NotificationServiceImpl implements INotificationService {
 
     private void setupNotification(String arnTopic){
         logger.info("Trayendo datos de conexion...");
-        this.awsTopicAllResidents = EncryptionUtil.decode(arnTopic);
-        this.accessKey = EncryptionUtil.decode(accessKey);
-        this.secretKey = EncryptionUtil.decode(secretKey);
+        this.awsTopicAllResidentsDec = EncryptionUtil.decode(arnTopic);
+        this.accessKeyDec = EncryptionUtil.decode(this.accessKey);
+        this.secretKeyDec = EncryptionUtil.decode(this.secretKey);
     }
 
     private  void setupSnSHandler(){
         try {
-            logger.info("Estableciendo conexion con topic");
-            this.snSHandler = new SnsHandler(accessKey, secretKey);
+            logger.info("Estableciendo conexion con topic...");
+            this.snSHandler = new SnsHandler(accessKeyDec, secretKeyDec);
         } catch (Exception e) {
             logger.error(ERROR_PUBLISH_MESSAGE);
         }

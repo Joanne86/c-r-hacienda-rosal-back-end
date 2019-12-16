@@ -10,7 +10,9 @@ import cr.hacienda.rosal.entities.ResidentCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SnsHandler {
 
@@ -50,6 +52,32 @@ public class SnsHandler {
         for (Subscription sub : result.getSubscriptions()) {
             logger.info(sub.getEndpoint());
         }
+    }
+
+    /**
+     * optimizar AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
+     *         snsClient.setRegion(Region.getRegion(Regions.US_EAST_1)); dejarlo como un singleton
+     * @param menssage
+     * @param phoneNumber
+     */
+
+    public void sendMessageToOne(String menssage, String phoneNumber){
+        logger.info("Estableciendo parametros para mensaje de texto");
+        AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
+        snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+        Map<String, MessageAttributeValue> smsAttributes =
+                new HashMap<>();
+        sendSMSMessage(snsClient, menssage, phoneNumber, smsAttributes);
+    }
+
+    public void sendSMSMessage(AmazonSNSClient snsClient, String message,
+                                      String phoneNumber, Map<String, MessageAttributeValue> smsAttributes) {
+        logger.info("Enviando mensaje al numero: {}",phoneNumber);
+        PublishResult result = snsClient.publish(new PublishRequest()
+                .withMessage(message)
+                .withPhoneNumber(phoneNumber)
+                .withMessageAttributes(smsAttributes));
+        logger.info("Finaliza envio de mensaje exitoso: {}", result);
     }
 
     public void addNumbers(String awsTopic, List<ResidentCredentials> residentCredentialsList){

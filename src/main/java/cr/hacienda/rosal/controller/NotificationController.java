@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.controller;
 
+import cr.hacienda.rosal.dto.MessageDto;
 import cr.hacienda.rosal.entities.ResidentCredentials;
 import cr.hacienda.rosal.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,21 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-all")
     public ResponseEntity<Void> sendMessageToAll(@RequestParam String message){
-        //se tiene que tener los numeros ya montados en el topic
-        return null;
+        notificationService.sendMessageToAll(message);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Metodo que envia mensaje personalizado a un residente del conjunto
+     * @param messageDto
+     * @return
+     */
+
+    @PostMapping ("/send-message-to-one")
+    public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
+        //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
+        notificationService.sendMessageToOne(messageDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -69,19 +83,6 @@ public class NotificationController {
     @PostMapping ("/send-message-to-debtors")
     public ResponseEntity<Void> sendMessageToDebtors(@RequestParam String message){
         //se tiene que tener los numeros ya montados en el topic
-        return null;
-    }
-
-    /**
-     * Metodo que envia mensaje personalizado a un moroso del conjunto
-     * @param message
-     * @return
-     */
-
-
-    @PostMapping ("/send-message-to-one")
-    public ResponseEntity<Void> sendMessageToOne(@RequestParam  String message, @RequestBody ResidentCredentials residentCredentials){
-        //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
         return null;
     }
 }
