@@ -53,8 +53,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public void sendMessageToAll(String message) {
-        setupNotification(this.awsTopicAllResidents);
-        setupSnSHandler();
+        setDataToConnectSNS();
         logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", message);
         this.snSHandler.createPublishToTopic(awsTopicAllResidentsDec, message);
     }
@@ -62,8 +61,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void sendMessageToOne(MessageDto messageDto) {
         try {
-            setupNotification(this.awsTopicAllResidents);
-            setupSnSHandler();
+            setDataToConnectSNS();
             this.snSHandler.sendMessageToOne(messageDto.getMessage(), messageDto.getPhoneNumber());
         } catch (Exception e) {
             logger.error("error: {} message: {}", ERROR_PUBLISH_MESSAGE, e.getMessage());
@@ -73,8 +71,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void addAllNumbers(List<ResidentCredentials> residentCredentialsList){
         try {
-            setupNotification(this.awsTopicAllResidents);
-            setupSnSHandler();
+            setDataToConnectSNS();
             if(this.snSHandler != null){
                 this.snSHandler.addNumbers(this.awsTopicAllResidentsDec, residentCredentialsList);
             }
@@ -85,12 +82,16 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void addDebtorsNumbers(List<ResidentCredentials> residentCredentialsList){
         try {
-            setupNotification(this.awsTopicDebtors);
-            setupSnSHandler();
+            setDataToConnectSNS();
             this.snSHandler.addNumbers(this.awsTopicDebtors, residentCredentialsList);
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de los deudores");
         }
+    }
+
+    private void setDataToConnectSNS(){
+        setupNotification(this.awsTopicAllResidents);
+        setupSnSHandler();
     }
 
     private void setupNotification(String arnTopic){

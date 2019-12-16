@@ -18,7 +18,8 @@ public class SnsHandler {
 
     Logger logger = LoggerFactory.getLogger(SnsHandler.class);
 
-    AWSCredentials awsCredentials;
+    private AWSCredentials awsCredentials;
+    private AmazonSNSClient snsClient;
 
     public SnsHandler(String accessKey, String secretKey) throws Exception {
         if (accessKey != null && !accessKey.equals("") && secretKey != null && !secretKey.equals("")) {
@@ -39,16 +40,14 @@ public class SnsHandler {
     }
 
     private String sendMessageToTopic(PublishRequest publishRequest) {
-        AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
-        snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
-        PublishResult publishResult = snsClient.publish(publishRequest);
+        getAmazonSNSClient();
+        PublishResult publishResult = this.snsClient.publish(publishRequest);
         return publishResult.getMessageId();
     }
 
     public void showNumbers(){
-        AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
-        snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
-        ListSubscriptionsResult result = snsClient.listSubscriptions();
+        getAmazonSNSClient();
+        ListSubscriptionsResult result = this.snsClient.listSubscriptions();
         for (Subscription sub : result.getSubscriptions()) {
             logger.info(sub.getEndpoint());
         }
@@ -63,11 +62,10 @@ public class SnsHandler {
 
     public void sendMessageToOne(String menssage, String phoneNumber){
         logger.info("Estableciendo parametros para mensaje de texto");
-        AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
-        snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+        getAmazonSNSClient();
         Map<String, MessageAttributeValue> smsAttributes =
                 new HashMap<>();
-        sendSMSMessage(snsClient, menssage, phoneNumber, smsAttributes);
+        sendSMSMessage(this.snsClient, menssage, phoneNumber, smsAttributes);
     }
 
     public void sendSMSMessage(AmazonSNSClient snsClient, String message,
@@ -81,24 +79,28 @@ public class SnsHandler {
     }
 
     public void addNumbers(String awsTopic, List<ResidentCredentials> residentCredentialsList){
-        AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
-        snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+        getAmazonSNSClient();
         logger.info("Agregando todos los numeros de telefono del conjunto");
         for (ResidentCredentials listNumbers: residentCredentialsList){
             logger.info("numero: {}", listNumbers.getNumberCellphone());
-            subscribeToTopic(snsClient, awsTopic, "sms", listNumbers.getNumberCellphone());
+            subscribeToTopic(this.snsClient, awsTopic, "sms", listNumbers.getNumberCellphone());
         }
     }
 
-    public static void subscribeToTopic(AmazonSNSClient snsClient, String topicArn,
+    public void subscribeToTopic(AmazonSNSClient snsClient, String topicArn,
                                         String protocol, String endpoint) {
         SubscribeRequest subscribe = new SubscribeRequest(topicArn, protocol,
                 endpoint);
         SubscribeResult subscribeResult = snsClient.subscribe(subscribe);
-        System.out.println("Subscribe request: " +
+        logger.info("Subscribe request: " +
                 snsClient.getCachedResponseMetadata(subscribe));
-        System.out.println("Subscribe result: " + subscribeResult);
-
+        logger.info("Subscribe result: " + subscribeResult);
     }
 
+    public void getAmazonSNSClient(){
+        if(this.snsClient == null){
+            this.snsClient = new AmazonSNSClient(this.awsCredentials);
+            snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
+        }
+    }
 }
