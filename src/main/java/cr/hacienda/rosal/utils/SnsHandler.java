@@ -29,11 +29,6 @@ public class SnsHandler {
         }
     }
 
-    /**
-     * Metodo que envia un mensaje igual a todos los residentes del conjunto
-     * @param topicArn
-     * @param msg
-     */
     public void createPublishToTopic(String topicArn, String msg) {
         PublishRequest publishRequest = new PublishRequest(topicArn, msg);
         this.sendMessageToTopic(publishRequest);
@@ -52,13 +47,6 @@ public class SnsHandler {
             logger.info(sub.getEndpoint());
         }
     }
-
-    /**
-     * optimizar AmazonSNSClient snsClient = new AmazonSNSClient(this.awsCredentials);
-     *         snsClient.setRegion(Region.getRegion(Regions.US_EAST_1)); dejarlo como un singleton
-     * @param menssage
-     * @param phoneNumber
-     */
 
     public void sendMessageToOne(String menssage, String phoneNumber){
         logger.info("Estableciendo parametros para mensaje de texto");
@@ -92,9 +80,9 @@ public class SnsHandler {
         SubscribeRequest subscribe = new SubscribeRequest(topicArn, protocol,
                 endpoint);
         SubscribeResult subscribeResult = snsClient.subscribe(subscribe);
-        logger.info("Subscribe request: " +
+        logger.info("Subscribe request: {}",
                 snsClient.getCachedResponseMetadata(subscribe));
-        logger.info("Subscribe result: " + subscribeResult);
+        logger.info("Subscribe result: {}", subscribeResult);
     }
 
     public void getAmazonSNSClient(){

@@ -11,4 +11,5 @@ public interface INotificationService {
     void sendMessageToOne(MessageDto messageDto);
     void addAllNumbers(List<ResidentCredentials> residentCredentialsList);
     void addDebtorsNumbers(List<ResidentCredentials> residentCredentialsList);
+    void getAllNumber();
 }

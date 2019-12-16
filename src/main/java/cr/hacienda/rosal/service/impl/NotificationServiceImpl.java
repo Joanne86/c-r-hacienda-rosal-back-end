@@ -89,6 +89,16 @@ public class NotificationServiceImpl implements INotificationService {
         }
     }
 
+    @Override
+    public void getAllNumber() {
+        try {
+            setDataToConnectSNS();
+            this.snSHandler.showNumbers();
+        } catch (Exception e) {
+            logger.error("");
+        }
+    }
+
     private void setDataToConnectSNS(){
         setupNotification(this.awsTopicAllResidents);
         setupSnSHandler();

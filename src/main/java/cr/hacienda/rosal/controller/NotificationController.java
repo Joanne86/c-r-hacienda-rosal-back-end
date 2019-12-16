@@ -79,4 +79,11 @@ public class NotificationController {
     public ResponseEntity<Void> sendMessageToDebtors(@RequestParam String message){
         return null;
     }
+
+    @GetMapping ("/get-all-number")
+    public ResponseEntity<Iterable<String>> getAllNumbers(){
+        notificationService.getAllNumber();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
