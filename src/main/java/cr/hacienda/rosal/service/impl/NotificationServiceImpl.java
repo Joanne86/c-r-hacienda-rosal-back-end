@@ -53,6 +53,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public void sendMessageToAll(String message) {
+        setupNotification(this.awsTopicAllResidents);
         setupSnSHandler();
         logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", message);
         this.snSHandler.createPublishToTopic(awsTopicAllResidentsDec, message);

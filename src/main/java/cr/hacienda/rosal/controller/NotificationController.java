@@ -25,10 +25,8 @@ public class NotificationController {
      * @return
      */
 
-
     @PostMapping("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody List<ResidentCredentials> residentCredentialsList){
-        //poner try
         notificationService.save(residentCredentialsList);
         notificationService.addAllNumbers(residentCredentialsList);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -42,10 +40,8 @@ public class NotificationController {
 
     @PostMapping ("/add-debtors-numbers")
     public ResponseEntity<Void> addDebtorsNumbers(@RequestBody List<ResidentCredentials> residentCredentialsList){
-        //recibir una lista de objetos con:
-        //guardar en base de datos con los nombres y numero de casa
-        //publicar en sns(Deudores) cada numero
-        return null;
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -56,7 +52,7 @@ public class NotificationController {
 
 
     @PostMapping ("/send-message-to-all")
-    public ResponseEntity<Void> sendMessageToAll(@RequestParam String message){
+    public ResponseEntity<Void> sendMessageToAll(@RequestBody String message){
         notificationService.sendMessageToAll(message);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -69,7 +65,6 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-one")
     public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
-        //buscar como hacer esta logica, enviar a un numero de telefono teniendo el topic ya creado
         notificationService.sendMessageToOne(messageDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -82,7 +77,6 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-debtors")
     public ResponseEntity<Void> sendMessageToDebtors(@RequestParam String message){
-        //se tiene que tener los numeros ya montados en el topic
         return null;
     }
 }

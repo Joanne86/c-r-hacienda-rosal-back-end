@@ -1,0 +1,12 @@
+TAREAS:
+
+crear topics:
+1. para todos los del conjunto
+2. para solo los deudores
+
+Crear modelo de datos que mantengan las subscripciones
+Refactorizar el codigo de creacion del publish con credenciales (utilizar singleton)
+
+migrar lo que se ha hecho a la cuenta de kathe y cambiar los endpoint
+
+
