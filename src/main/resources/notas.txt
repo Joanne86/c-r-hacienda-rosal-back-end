@@ -8,4 +8,12 @@ Crear modelo de datos que mantengan las subscripciones
 
 migrar lo que se ha hecho a la cuenta de kathe y cambiar los endpoint
 
+pedirle a kathe la cuenta de aws
+
+diseñar los mockups, tomar algo de lo que hizo kathe
+
+manejar errores con excepciones
+
+
+
 

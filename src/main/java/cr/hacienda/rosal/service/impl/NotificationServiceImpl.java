@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class NotificationServiceImpl implements INotificationService {
             setDataToConnectSNS();
             this.snSHandler.showNumbers();
         } catch (Exception e) {
-            logger.error("");
+            logger.error("Ocurrio un error al obtener todos los numeros del conjunto desde aws");
         }
     }
 
