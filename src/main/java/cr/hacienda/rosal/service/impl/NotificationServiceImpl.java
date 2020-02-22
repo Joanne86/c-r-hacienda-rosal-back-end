@@ -1,8 +1,8 @@
 package cr.hacienda.rosal.service.impl;
 
 import cr.hacienda.rosal.dto.MessageDto;
-import cr.hacienda.rosal.entities.ResidentCredentials;
-import cr.hacienda.rosal.repository.ResidentRepository;
+import cr.hacienda.rosal.entities.User;
+import cr.hacienda.rosal.repository.UserRepository;
 import cr.hacienda.rosal.service.INotificationService;
 import cr.hacienda.rosal.utils.EncryptionUtil;
 import cr.hacienda.rosal.utils.SnsHandler;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class NotificationServiceImpl implements INotificationService {
     Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
     @Autowired
-    ResidentRepository residentRepository;
+    UserRepository userRepository;
 
     @Value("${arn.topic.all.residents}")
     private String awsTopicAllResidents;
@@ -47,9 +46,9 @@ public class NotificationServiceImpl implements INotificationService {
     private  SnsHandler snSHandler;
 
     @Override
-    public void save(Iterable<ResidentCredentials> residentCredentialsList) {
+    public void save(Iterable<User> residentCredentialsList) {
         logger.info("Guardando en base de datos los numeros de telefono de los residentes");
-        residentRepository.saveAll(residentCredentialsList);
+        userRepository.saveAll(residentCredentialsList);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public void addAllNumbers(List<ResidentCredentials> residentCredentialsList){
+    public void addAllNumbers(List<User> residentCredentialsList){
         try {
             setDataToConnectSNS();
             if(this.snSHandler != null){
@@ -81,7 +80,7 @@ public class NotificationServiceImpl implements INotificationService {
         }
     }
     @Override
-    public void addDebtorsNumbers(List<ResidentCredentials> residentCredentialsList){
+    public void addDebtorsNumbers(List<User> residentCredentialsList){
         try {
             setDataToConnectSNS();
             this.snSHandler.addNumbers(this.awsTopicDebtors, residentCredentialsList);

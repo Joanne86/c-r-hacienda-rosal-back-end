@@ -1,8 +1,18 @@
 package cr.hacienda.rosal.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Table
+@Entity(name = "state_request")
 public class StateRequest {
 
+    @Id
+    @Column
     private int id;
+    @Column
     private String state;
 
     public int getId() {

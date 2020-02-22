@@ -7,6 +7,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.*;
 import cr.hacienda.rosal.entities.ResidentCredentials;
+import cr.hacienda.rosal.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,12 +67,12 @@ public class SnsHandler {
         logger.info("Finaliza envio de mensaje exitoso: {}", result);
     }
 
-    public void addNumbers(String awsTopic, List<ResidentCredentials> residentCredentialsList){
+    public void addNumbers(String awsTopic, List<User> residentCredentialsList){
         getAmazonSNSClient();
         logger.info("Agregando todos los numeros de telefono del conjunto");
-        for (ResidentCredentials listNumbers: residentCredentialsList){
-            logger.info("numero: {}", listNumbers.getNumberCellphone());
-            subscribeToTopic(this.snsClient, awsTopic, "sms", listNumbers.getNumberCellphone());
+        for (User listNumbers: residentCredentialsList){
+            logger.info("numero: {}", listNumbers.getCellphone());
+            subscribeToTopic(this.snsClient, awsTopic, "sms", listNumbers.getCellphone());
         }
     }
 

@@ -1,11 +1,19 @@
 package cr.hacienda.rosal.entities;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Table
+@Entity(name="news")
 public class News {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private int id;
+    @Column
     private String information;
+    @Column (name = "publish_date")
     private Date publish;
 
     public int getId() {

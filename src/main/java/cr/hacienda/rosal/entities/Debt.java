@@ -1,8 +1,17 @@
 package cr.hacienda.rosal.entities;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="debt")
 public class Debt {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private int id;
+    @Column
     private float amount;
+    @Column
     private int months;
 
     public int getId() {

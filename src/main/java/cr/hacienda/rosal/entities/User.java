@@ -1,15 +1,30 @@
 package cr.hacienda.rosal.entities;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="user")
 public class User {
 
+    @Id
+    @Column (name = "document_number")
     private String documentNumber;
+    @Column (name = "first_name")
     private String firstName;
+    @Column (name = "second_name")
     private String secondName;
+    @Column (name = "last_name")
     private String lastName;
+    @Column
     private String cellphone;
 
-    //idType
-    //idSession
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_type", referencedColumnName = "id")
+    private UserType userType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_session", referencedColumnName = "id")
+    private Session session;
 
     public String getDocumentNumber() {
         return documentNumber;
@@ -49,5 +64,21 @@ public class User {
 
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 }
