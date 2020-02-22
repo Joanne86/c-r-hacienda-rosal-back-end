@@ -5,8 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table
-@Entity(name = "state_request")
+
+@Entity
+@Table(name = "state_request")
 public class StateRequest {
 
     @Id

@@ -2,14 +2,14 @@ package cr.hacienda.rosal.entities;
 
 import javax.persistence.*;
 
-@Table
-@Entity(name="home")
+@Entity
+@Table(name="home")
 public class Home {
     @Id
     @Column(name="tower_number_home")
     private String towerNumberHome;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document", referencedColumnName = "documentNumber")
+    @JoinColumn(name = "document", referencedColumnName = "document_number")
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_debt", referencedColumnName = "id")

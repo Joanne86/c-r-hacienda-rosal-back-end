@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table
-@Entity(name = "type_request")
+@Entity
+@Table(name = "type_request")
 public class TypeRequest {
 
     @Id

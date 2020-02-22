@@ -15,7 +15,7 @@ public class Comentary {
     @Column (name="publish_date")
     private Date publishDate;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document", referencedColumnName = "documentNumber" )
+    @JoinColumn(name = "document", referencedColumnName = "document_number" )
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_news", referencedColumnName = "id" )

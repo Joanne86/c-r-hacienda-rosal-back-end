@@ -3,8 +3,8 @@ package cr.hacienda.rosal.entities;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table
-@Entity(name = "request")
+@Entity
+@Table(name = "request")
 public class Request {
 
     @Id
