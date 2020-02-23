@@ -3,8 +3,9 @@ package cr.hacienda.rosal.controller;
 import cr.hacienda.rosal.dto.MessageDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.User;
+import cr.hacienda.rosal.service.IHomeService;
 import cr.hacienda.rosal.service.INotificationService;
-import cr.hacienda.rosal.utils.Mapper;
+import cr.hacienda.rosal.utils.MapperDtos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class NotificationController {
 
     @Autowired
     INotificationService notificationService;
+    @Autowired
+    IHomeService homeService;
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS y los guarda en base de datos
@@ -30,8 +33,11 @@ public class NotificationController {
 
     @PostMapping("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
-        notificationService.save(Mapper.mapUsers(users));
-        notificationService.addAllNumbers(Mapper.mapCellphones(users));
+
+        notificationService.save(MapperDtos.mapUserDtoToUser(users));
+        homeService.saveAll(MapperDtos.mapHomes(users));
+
+        notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

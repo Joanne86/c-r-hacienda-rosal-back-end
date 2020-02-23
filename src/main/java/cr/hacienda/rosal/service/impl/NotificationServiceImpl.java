@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @Service
 public class NotificationServiceImpl implements INotificationService {
 
-    Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
     @Autowired
     UserRepository userRepository;
@@ -49,7 +49,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public void save(Iterable<User> users) {
-        logger.info("Guardando en base de datos los numeros de telefono de los residentes");
+        logger.info("Guardando en base de datos los residentes");
         userRepository.saveAll(users);
     }
 

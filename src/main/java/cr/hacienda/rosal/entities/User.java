@@ -18,11 +18,11 @@ public class User {
     @Column
     private String cellphone;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "id_type", referencedColumnName = "id")
     private UserType userType;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "id_session", referencedColumnName = "id")
     private Session session;
 

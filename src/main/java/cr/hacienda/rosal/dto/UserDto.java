@@ -7,7 +7,8 @@ public class UserDto {
     private String secondName;
     private String lastName;
     private String cellphone;
-    private String userType;
+    private String towerNumberHome;
+    private int userType;
 
     public String getDocumentNumber() {
         return documentNumber;
@@ -49,11 +50,19 @@ public class UserDto {
         this.cellphone = cellphone;
     }
 
-    public String getUserType() {
+    public int getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(int userType) {
         this.userType = userType;
+    }
+
+    public String getTowerNumberHome() {
+        return towerNumberHome;
+    }
+
+    public void setTowerNumberHome(String towerNumberHome) {
+        this.towerNumberHome = towerNumberHome;
     }
 }

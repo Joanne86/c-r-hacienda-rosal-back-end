@@ -10,7 +10,7 @@ public class Session {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name="username")
-    private String user;
+    private String username;
     @Column (name="password")
     private String password;
 
@@ -22,12 +22,12 @@ public class Session {
         this.id = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

@@ -9,7 +9,7 @@ public class Home {
     @Column(name="tower_number_home")
     private String towerNumberHome;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document", referencedColumnName = "document_number")
+    @JoinColumn(name = "document_number", referencedColumnName = "document_number")
     private User user;
 
     public String getTowerNumberHome() {

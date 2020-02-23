@@ -9,7 +9,7 @@ create table if not exists user_type (
 
 create table if not exists session(
 	id int (2) not null auto_increment primary key,
-    user varchar(15) not null,
+    username varchar(15) not null,
     password varchar(15) not null
 );
 
