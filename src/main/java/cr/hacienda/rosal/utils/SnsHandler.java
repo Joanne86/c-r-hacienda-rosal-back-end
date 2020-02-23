@@ -11,6 +11,7 @@ import cr.hacienda.rosal.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +68,12 @@ public class SnsHandler {
         logger.info("Finaliza envio de mensaje exitoso: {}", result);
     }
 
-    public void addNumbers(String awsTopic, List<User> residentCredentialsList){
+    public void addNumbers(String awsTopic, ArrayList<String> cellphones){
         getAmazonSNSClient();
         logger.info("Agregando todos los numeros de telefono del conjunto");
-        for (User listNumbers: residentCredentialsList){
-            logger.info("numero: {}", listNumbers.getCellphone());
-            subscribeToTopic(this.snsClient, awsTopic, "sms", listNumbers.getCellphone());
+        for (int i = 0; i<cellphones.size(); i++){
+            logger.info("numero: {}", cellphones.get(i));
+            subscribeToTopic(this.snsClient, awsTopic, "sms", cellphones.get(i));
         }
     }
 
@@ -86,7 +87,7 @@ public class SnsHandler {
         logger.info("Subscribe result: {}", subscribeResult);
     }
 
-    public void getAmazonSNSClient(){
+    private void getAmazonSNSClient(){
         if(this.snsClient == null){
             this.snsClient = new AmazonSNSClient(this.awsCredentials);
             snsClient.setRegion(Region.getRegion(Regions.US_EAST_1));

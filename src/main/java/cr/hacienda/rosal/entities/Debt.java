@@ -13,6 +13,9 @@ public class Debt {
     private float amount;
     @Column
     private int months;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tower_number_home", referencedColumnName = "tower_number_home")
+    private Home home;
 
     public int getId() {
         return id;
@@ -36,5 +39,13 @@ public class Debt {
 
     public void setMonths(int months) {
         this.months = months;
+    }
+
+    public Home getHome() {
+        return home;
+    }
+
+    public void setHome(Home home) {
+        this.home = home;
     }
 }

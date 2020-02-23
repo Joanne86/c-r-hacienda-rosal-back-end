@@ -11,10 +11,6 @@ public class Home {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "document", referencedColumnName = "document_number")
     private User user;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_debt", referencedColumnName = "id")
-    private Debt debt;
-
 
     public String getTowerNumberHome() {
         return towerNumberHome;
@@ -30,13 +26,5 @@ public class Home {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Debt getDebt() {
-        return debt;
-    }
-
-    public void setDebt(Debt debt) {
-        this.debt = debt;
     }
 }

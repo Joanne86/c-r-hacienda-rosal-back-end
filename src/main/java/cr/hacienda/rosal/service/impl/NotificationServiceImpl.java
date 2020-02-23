@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class NotificationServiceImpl implements INotificationService {
@@ -30,6 +30,8 @@ public class NotificationServiceImpl implements INotificationService {
     @Value("${arn.topic.debtors.residents}")
     private String awsTopicDebtors;
 
+    private String awsTopicDebtorsDec;
+
     @Value("${access.key}")
     private String accessKey;
 
@@ -40,50 +42,60 @@ public class NotificationServiceImpl implements INotificationService {
 
     private String secretKeyDec;
 
-    private static String ERROR_PUBLISH_MESSAGE = "Ocurrrio un error al enviar mensaje";
+    private static String ERROR_PUBLISH_MESSAGE = "Ocurrio un error al enviar mensaje";
     private static String PREFIX_MESSAGE_TO_ALL = "Hacienda el Rosal te informa que ";
 
     private  SnsHandler snSHandler;
 
     @Override
-    public void save(Iterable<User> residentCredentialsList) {
+    public void save(Iterable<User> users) {
         logger.info("Guardando en base de datos los numeros de telefono de los residentes");
-        userRepository.saveAll(residentCredentialsList);
+        userRepository.saveAll(users);
     }
 
     @Override
-    public void sendMessageToAll(String message) {
-        setDataToConnectSNS();
-        logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", message);
-        this.snSHandler.createPublishToTopic(awsTopicAllResidentsDec, message);
+    public void sendMessageToAllResidents(String message) {
+        setDataToConnectSNSToAllResidents();
+        String messageToSend=addPrefix(message);
+        logger.info("Enviando un mensaje a todos los residentes del conjunto: {}", messageToSend);
+        this.snSHandler.createPublishToTopic(awsTopicAllResidentsDec, messageToSend);
+    }
+
+    @Override
+    public void sendMessageToAllDebtors(String message) {
+        setDataToConnectSNSToAllDebtors();
+        String messageToSend=addPrefix(message);
+        logger.info("Enviando un mensaje a todos los residentes deudores del conjunto: {}", messageToSend);
+        this.snSHandler.createPublishToTopic(awsTopicDebtorsDec, messageToSend);
     }
 
     @Override
     public void sendMessageToOne(MessageDto messageDto) {
         try {
-            setDataToConnectSNS();
-            this.snSHandler.sendMessageToOne(messageDto.getMessage(), messageDto.getPhoneNumber());
+            setDataToConnectSNSToAllResidents();
+            String messageToSend=addPrefix(messageDto.getMessage());
+            this.snSHandler.sendMessageToOne(messageToSend, messageDto.getPhoneNumber());
         } catch (Exception e) {
             logger.error("error: {} message: {}", ERROR_PUBLISH_MESSAGE, e.getMessage());
         }
     }
 
     @Override
-    public void addAllNumbers(List<User> residentCredentialsList){
+    public void addAllNumbers(ArrayList<String> cellphones){
         try {
-            setDataToConnectSNS();
+            setDataToConnectSNSToAllResidents();
             if(this.snSHandler != null){
-                this.snSHandler.addNumbers(this.awsTopicAllResidentsDec, residentCredentialsList);
+                this.snSHandler.addNumbers(this.awsTopicAllResidentsDec, cellphones);
             }
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de telefono de todo el conjunto");
         }
     }
     @Override
-    public void addDebtorsNumbers(List<User> residentCredentialsList){
+    public void addDebtorsNumber(ArrayList<String> cellphones){
         try {
-            setDataToConnectSNS();
-            this.snSHandler.addNumbers(this.awsTopicDebtors, residentCredentialsList);
+            setDataToConnectSNSToAllDebtors();
+            this.snSHandler.addNumbers(this.awsTopicDebtorsDec, cellphones);
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de los deudores");
         }
@@ -92,21 +104,45 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public void getAllNumber() {
         try {
-            setDataToConnectSNS();
+            setDataToConnectSNSToAllResidents();
+            this.snSHandler.showNumbers();
+        } catch (Exception e) {
+            logger.error("Ocurrio un error al obtener todos los numeros del conjunto desde aws");
+        }
+    }
+    @Override
+    public void getAllDebtorsNumber() {
+        try {
+            setDataToConnectSNSToAllDebtors();
             this.snSHandler.showNumbers();
         } catch (Exception e) {
             logger.error("Ocurrio un error al obtener todos los numeros del conjunto desde aws");
         }
     }
 
-    private void setDataToConnectSNS(){
-        setupNotification(this.awsTopicAllResidents);
+    private void setDataToConnectSNSToAllDebtors(){
+        setupNotificationToAllDebtors(this.awsTopicDebtors);
         setupSnSHandler();
     }
 
-    private void setupNotification(String arnTopic){
+    private void setupNotificationToAllDebtors(String arnTopic){
+        logger.info("Trayendo datos de conexion...");
+        this.awsTopicDebtorsDec = EncryptionUtil.decode(arnTopic);
+        decAccess();
+    }
+
+    private void setDataToConnectSNSToAllResidents(){
+        setupNotificationToAllResidents(this.awsTopicAllResidents);
+        setupSnSHandler();
+    }
+
+    private void setupNotificationToAllResidents(String arnTopic){
         logger.info("Trayendo datos de conexion...");
         this.awsTopicAllResidentsDec = EncryptionUtil.decode(arnTopic);
+        decAccess();
+    }
+
+    private void decAccess(){
         this.accessKeyDec = EncryptionUtil.decode(this.accessKey);
         this.secretKeyDec = EncryptionUtil.decode(this.secretKey);
     }
@@ -118,5 +154,9 @@ public class NotificationServiceImpl implements INotificationService {
         } catch (Exception e) {
             logger.error(ERROR_PUBLISH_MESSAGE);
         }
+    }
+
+    private String addPrefix(String message){
+        return PREFIX_MESSAGE_TO_ALL.concat(message);
     }
 }
