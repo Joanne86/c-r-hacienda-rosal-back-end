@@ -24,7 +24,7 @@ public class MapperDtos {
         return usersDB;
     }
 
-    static User getUser(UserDto u){
+    private static User getUser(UserDto u){
         User user = new User();
         Session session = new Session();
         UserType userType = new UserType();
@@ -73,22 +73,25 @@ public class MapperDtos {
         return homes;
     }
 
-    public static Iterable<UserDto> mapUserToUserDto(Iterable<User> users){
+    public static Iterable<UserDto> mapUserToUserDto(Iterable<Home> homes){
         ArrayList<UserDto> userDtos = new ArrayList<>();
-        for(User u: users){
-            userDtos.add(getUserDto(u));
+        for(Home h: homes){
+            userDtos.add(getUserDto(h));
         }
         return userDtos;
     }
 
-    public static UserDto getUserDto(User user){
+    private static UserDto getUserDto(Home home){
         UserDto userDto = new UserDto();
-        userDto.setDocumentNumber(user.getDocumentNumber());
-        userDto.setCellphone(user.getCellphone());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-       // userDto.setTowerNumberHome(user.get);
-        userDto.setUserType(user.getUserType().getId());
+
+        userDto.setTowerNumberHome(home.getTowerNumberHome());
+        userDto.setDocumentNumber(home.getUser().getDocumentNumber());
+        userDto.setCellphone(home.getUser().getCellphone());
+        userDto.setFirstName(home.getUser().getFirstName());
+        userDto.setSecondName(home.getUser().getSecondName());
+        userDto.setLastName(home.getUser().getLastName());
+        userDto.setUserType(home.getUser().getUserType().getId());
+
         return userDto;
     }
 }

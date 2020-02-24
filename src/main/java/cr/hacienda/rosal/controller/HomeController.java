@@ -23,18 +23,7 @@ public class HomeController {
     @GetMapping("/get-homes")
     public ResponseEntity<Iterable<Home>> getAllHomes(){
         Iterable<Home> homes = homeService.getAllHomes();
-
-        int size = 0;
-
-        if (homes instanceof Collection<?>) {
-            size= ((Collection<?>)homes).size();
-        }
-
-        if(size>0){
-            return new ResponseEntity<>(homes, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        return new ResponseEntity<>(homes, HttpStatus.OK);
     }
 
 }
