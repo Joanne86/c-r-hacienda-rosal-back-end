@@ -106,4 +106,9 @@ public class NotificationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/delete-number")
+    public void delete(){
+        notificationService.deleteNumber();
+    }
+
 }

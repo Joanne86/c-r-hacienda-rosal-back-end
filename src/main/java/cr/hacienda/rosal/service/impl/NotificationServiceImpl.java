@@ -110,6 +110,15 @@ public class NotificationServiceImpl implements INotificationService {
             logger.error("Ocurrio un error al obtener todos los numeros del conjunto desde aws");
         }
     }
+
+    public void deleteNumber() {
+        try {
+            setDataToConnectSNSToAllResidents();
+            this.snSHandler.deleteSubcriptor();
+        } catch (Exception e) {
+            logger.error("Ocurrio un error al obtener todos los numeros del conjunto desde aws");
+        }
+    }
     @Override
     public void getAllDebtorsNumber() {
         try {

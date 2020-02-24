@@ -6,14 +6,11 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.*;
-import cr.hacienda.rosal.entities.ResidentCredentials;
-import cr.hacienda.rosal.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SnsHandler {
@@ -26,6 +23,7 @@ public class SnsHandler {
     public SnsHandler(String accessKey, String secretKey) throws Exception {
         if (accessKey != null && !accessKey.equals("") && secretKey != null && !secretKey.equals("")) {
             this.awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+            getAmazonSNSClient();
         } else {
             throw new Exception("accessKey y secretKey no pueden ser nulos");
         }
@@ -85,6 +83,17 @@ public class SnsHandler {
         logger.info("Subscribe request: {}",
                 snsClient.getCachedResponseMetadata(subscribe));
         logger.info("Subscribe result: {}", subscribeResult);
+    }
+
+    public void deleteSubcriptor(){
+        ListSubscriptionsResult result = this.snsClient.listSubscriptions();
+        for (Subscription sub : result.getSubscriptions()) {
+            // hacer condicion de busqueda
+            System.out.println(sub.getEndpoint());
+            System.out.println("borrando arn: "+ sub.getSubscriptionArn());
+            this.snsClient.unsubscribe(sub.getSubscriptionArn());
+        }
+
     }
 
     private void getAmazonSNSClient(){
