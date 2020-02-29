@@ -7,12 +7,6 @@ create table if not exists user_type (
     rol varchar(15) not null
 );
 
-create table if not exists session(
-	id int (2) not null auto_increment primary key,
-    username varchar(15) not null,
-    password varchar(15) not null
-);
-
 create table if not exists user (
 	document_number varchar(10) not null primary key,
     first_name varchar(15) not null,
@@ -20,11 +14,8 @@ create table if not exists user (
     last_name varchar(30) not null,
     cellphone varchar(15) not null,
     id_type int (2) not null,
-    id_session int (2) not null,
     KEY id_type (id_type),
-    constraint `id_type_ibfk_1` foreign key (id_type) references user_type (id),
-    KEY id_session (id_session),
-    constraint `id_session_ibfk_2` foreign key (id_session) references session (id)
+    constraint `id_type_ibfk_1` foreign key (id_type) references user_type (id)
 );
 
 create table if not exists home (

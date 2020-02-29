@@ -22,10 +22,6 @@ public class User {
     @JoinColumn(name = "id_type", referencedColumnName = "id")
     private UserType userType;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "id_session", referencedColumnName = "id")
-    private Session session;
-
     public String getDocumentNumber() {
         return documentNumber;
     }
@@ -74,11 +70,4 @@ public class User {
         this.userType = userType;
     }
 
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
 }

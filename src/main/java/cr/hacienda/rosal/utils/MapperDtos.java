@@ -2,7 +2,6 @@ package cr.hacienda.rosal.utils;
 
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.Home;
-import cr.hacienda.rosal.entities.Session;
 import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.entities.UserType;
 
@@ -26,11 +25,7 @@ public class MapperDtos {
 
     private static User getUser(UserDto u){
         User user = new User();
-        Session session = new Session();
         UserType userType = new UserType();
-
-        session.setPassword(u.getDocumentNumber());
-        session.setUsername(u.getDocumentNumber());
 
         userType.setId(u.getUserType());
         userType.setRol(Mapps.getUserType().get(u.getUserType()));
@@ -41,7 +36,6 @@ public class MapperDtos {
         user.setSecondName(u.getSecondName());
         user.setLastName(u.getLastName());
 
-        user.setSession(session);
         user.setUserType(userType);
         return user;
     }
@@ -81,7 +75,7 @@ public class MapperDtos {
         return userDtos;
     }
 
-    private static UserDto getUserDto(Home home){
+    public static UserDto getUserDto(Home home){
         UserDto userDto = new UserDto();
 
         userDto.setTowerNumberHome(home.getTowerNumberHome());

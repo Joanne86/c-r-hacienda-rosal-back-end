@@ -1,8 +1,8 @@
 package cr.hacienda.rosal.service;
 
-import cr.hacienda.rosal.entities.Session;
+import cr.hacienda.rosal.dto.UserDto;
 
 public interface ILoginService {
-    Session getSession(String username, String password);
+    UserDto getSession(String username);
 
 }
