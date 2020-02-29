@@ -1,9 +1,7 @@
 package cr.hacienda.rosal.controller;
 
 import cr.hacienda.rosal.dto.UserDto;
-import cr.hacienda.rosal.entities.Home;
 import cr.hacienda.rosal.service.ILoginService;
-import cr.hacienda.rosal.service.impl.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
