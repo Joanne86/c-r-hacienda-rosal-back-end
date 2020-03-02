@@ -27,14 +27,12 @@ public class MapperDtos {
         User user = new User();
         UserType userType = new UserType();
 
-        userType.setId(u.getUserType());
-        userType.setRol(Mapps.getUserType().get(u.getUserType()));
+        userType.setId(1);
+        userType.setRol(Mapps.getUserType().get(1));
 
         user.setCellphone(u.getCellphone());
         user.setDocumentNumber(u.getDocumentNumber());
-        user.setFirstName(u.getFirstName());
-        user.setSecondName(u.getSecondName());
-        user.setLastName(u.getLastName());
+        user.setName(u.getName());
 
         user.setUserType(userType);
         return user;
@@ -81,9 +79,7 @@ public class MapperDtos {
         userDto.setTowerNumberHome(home.getTowerNumberHome());
         userDto.setDocumentNumber(home.getUser().getDocumentNumber());
         userDto.setCellphone(home.getUser().getCellphone());
-        userDto.setFirstName(home.getUser().getFirstName());
-        userDto.setSecondName(home.getUser().getSecondName());
-        userDto.setLastName(home.getUser().getLastName());
+        userDto.setName(home.getUser().getName());
         userDto.setUserType(home.getUser().getUserType().getId());
 
         return userDto;

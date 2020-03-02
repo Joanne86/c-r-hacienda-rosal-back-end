@@ -19,9 +19,5 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     HomeRepository homeRepository;
 
-    @Override
-    public Iterable<UserDto> getAllUsers() {
-        logger.info("Obteniendo usuarios de base de datos");
-        return MapperDtos.mapUserToUserDto(homeRepository.findAll());
-    }
+
 }

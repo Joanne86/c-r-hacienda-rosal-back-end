@@ -16,21 +16,6 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    IUserService userService;
 
-    @GetMapping ("/get-residents")
-    public ResponseEntity<Iterable<UserDto>> getResidents(){
-        Iterable<UserDto> users = userService.getAllUsers();
-        int size = 0;
-        if (users instanceof Collection<?>) {
-            size= ((Collection<?>)users).size();
-        }
-        if(size>0){
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
 
 }

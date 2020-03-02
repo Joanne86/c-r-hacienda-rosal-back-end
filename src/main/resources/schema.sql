@@ -9,9 +9,7 @@ create table if not exists user_type (
 
 create table if not exists user (
 	document_number varchar(10) not null primary key,
-    first_name varchar(15) not null,
-    second_name varchar(15),
-    last_name varchar(30) not null,
+    name varchar(100) not null,
     cellphone varchar(15) not null,
     id_type int (2) not null,
     KEY id_type (id_type),

@@ -1,8 +1,10 @@
 package cr.hacienda.rosal.service.impl;
 
+import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.Home;
 import cr.hacienda.rosal.repository.HomeRepository;
 import cr.hacienda.rosal.service.IHomeService;
+import cr.hacienda.rosal.utils.MapperDtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class HomeServiceImpl implements IHomeService {
     }
 
     @Override
-    public Iterable<Home> getAllHomes() {
-        logger.info("Inicia llamado de todos los apartamentos");
-        return homeRepository.findAll();
+    public Iterable<UserDto> getAllUsers() {
+        logger.info("Obteniendo usuarios de base de datos");
+        return MapperDtos.mapUserToUserDto(homeRepository.findAllResidents());
     }
 }

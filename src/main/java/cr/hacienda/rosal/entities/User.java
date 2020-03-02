@@ -9,12 +9,8 @@ public class User {
     @Id
     @Column (name = "document_number")
     private String documentNumber;
-    @Column (name = "first_name")
-    private String firstName;
-    @Column (name = "second_name")
-    private String secondName;
-    @Column (name = "last_name")
-    private String lastName;
+    @Column
+    private String name;
     @Column
     private String cellphone;
 
@@ -28,30 +24,6 @@ public class User {
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getCellphone() {
@@ -70,4 +42,11 @@ public class User {
         this.userType = userType;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
