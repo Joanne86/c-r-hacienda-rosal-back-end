@@ -7,4 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface DebtRepository extends CrudRepository<Debt, Integer> {
     @Query("SELECT d FROM Debt d WHERE d.amount<>0 AND d.months<>0 AND d.home.user.userType.id = 1")
     Iterable<Debt> getAllDebtors();
+
+    @Query("SELECT d FROM Debt d WHERE d.home.towerNumberHome = ?1")
+    Debt getDebtByTowerNumberHome(String towerNumberHome);
+
 }

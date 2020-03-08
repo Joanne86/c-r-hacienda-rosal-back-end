@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.controller;
 
+import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.service.IDebtorService;
 import cr.hacienda.rosal.service.IHomeService;
@@ -28,6 +29,10 @@ public class ResidentController {
         return new ResponseEntity<>(debtorService.getAllDebtors(), HttpStatus.OK);
     }
 
+    /*GetMapping("/get-debtor-info")
+    public ResponseEntity<DebtDto> getDebtorInfo(){
+        return new ResponseEntity<>(debtorService.get(), HttpStatus.OK);
+    }*/
     @GetMapping ("/get-residents")
     public ResponseEntity<Iterable<UserDto>> getResidents(){
         Iterable<UserDto> users = homeService.getAllUsers();

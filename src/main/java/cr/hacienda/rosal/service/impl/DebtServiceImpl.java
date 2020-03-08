@@ -23,4 +23,9 @@ public class DebtServiceImpl implements IDebtorService {
     public Iterable<UserDto> getAllDebtors() {
         return MapperDtos.mapDebtToUserDto(this.debtRepository.getAllDebtors());
     }
+
+    @Override
+    public Debt getDebtInfo() {
+        return null;
+    }
 }

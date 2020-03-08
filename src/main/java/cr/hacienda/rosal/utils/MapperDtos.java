@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.utils;
 
+import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.Debt;
 import cr.hacienda.rosal.entities.Home;
@@ -119,4 +120,7 @@ public class MapperDtos {
         }
         return debtorList;
     }
+    /*public static DebtDto getDebt(){
+
+    }*/
 }
