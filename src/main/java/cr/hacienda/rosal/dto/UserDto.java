@@ -7,6 +7,8 @@ public class UserDto {
     private String cellphone;
     private String towerNumberHome;
     private int userType;
+    private int months;
+    private float debt;
 
     public String getName() {
         return name;
@@ -19,6 +21,22 @@ public class UserDto {
 
     public int getUserType() {
         return userType;
+    }
+
+    public int getMonths() {
+        return months;
+    }
+
+    public float getDebt() {
+        return debt;
+    }
+
+    public void setDebt(float debt) {
+        this.debt = debt;
+    }
+
+    public void setMonths(int months) {
+        this.months = months;
     }
 
     public void setUserType(int userType) {

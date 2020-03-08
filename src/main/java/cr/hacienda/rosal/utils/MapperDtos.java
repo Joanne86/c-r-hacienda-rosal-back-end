@@ -1,6 +1,7 @@
 package cr.hacienda.rosal.utils;
 
 import cr.hacienda.rosal.dto.UserDto;
+import cr.hacienda.rosal.entities.Debt;
 import cr.hacienda.rosal.entities.Home;
 import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.entities.UserType;
@@ -57,12 +58,16 @@ public class MapperDtos {
         ArrayList<Home> homes = new ArrayList<>();
 
         for (UserDto u: users){
-            Home home = new Home();
-            home.setTowerNumberHome(u.getTowerNumberHome());
-            home.setUser(getUser(u));
-            homes.add(home);
+            homes.add(getHome(u));
         }
         return homes;
+    }
+
+    public static Home getHome(UserDto userDto){
+        Home home = new Home();
+        home.setTowerNumberHome(userDto.getTowerNumberHome());
+        home.setUser(getUser(userDto));
+        return home;
     }
 
     public static Iterable<UserDto> mapUserToUserDto(Iterable<Home> homes){
@@ -83,5 +88,35 @@ public class MapperDtos {
         userDto.setUserType(home.getUser().getUserType().getId());
 
         return userDto;
+    }
+
+    public static Iterable<Debt> mapUserDtoToDebt(ArrayList<UserDto> users){
+        ArrayList<Debt> debts = new ArrayList<>();
+
+        for (UserDto u: users){
+            Debt debt = new Debt();
+            debt.setAmount(u.getDebt());
+            debt.setMonths(u.getMonths());
+            debt.setHome(getHome(u));
+            debts.add(debt);
+        }
+        return debts;
+    }
+
+    public static ArrayList<UserDto> mapDebtToUserDto(Iterable<Debt> debtors) {
+        ArrayList<UserDto> debtorList = new ArrayList<>();
+
+        for (Debt d : debtors) {
+            UserDto user = new UserDto();
+            user.setUserType(d.getHome().getUser().getUserType().getId());
+            user.setName(d.getHome().getUser().getName());
+            user.setTowerNumberHome(d.getHome().getTowerNumberHome());
+            user.setCellphone(d.getHome().getUser().getCellphone());
+            user.setDebt(d.getAmount());
+            user.setMonths(d.getMonths());
+            user.setDocumentNumber(d.getHome().getUser().getDocumentNumber());
+            debtorList.add(user);
+        }
+        return debtorList;
     }
 }

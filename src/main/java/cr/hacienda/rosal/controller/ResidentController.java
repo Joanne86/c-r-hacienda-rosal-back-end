@@ -1,6 +1,7 @@
 package cr.hacienda.rosal.controller;
 
 import cr.hacienda.rosal.dto.UserDto;
+import cr.hacienda.rosal.service.IDebtorService;
 import cr.hacienda.rosal.service.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,12 @@ public class ResidentController {
 
     @Autowired
     IHomeService homeService;
+    @Autowired
+    IDebtorService debtorService;
 
-    @GetMapping("/debtors")
-    public ResponseEntity<Void> getDebtors(){
-        return null;
+    @GetMapping("/get-debtors")
+    public ResponseEntity<Iterable<UserDto>> getDebtors(){
+        return new ResponseEntity<>(debtorService.getAllDebtors(), HttpStatus.OK);
     }
 
     @GetMapping ("/get-residents")
