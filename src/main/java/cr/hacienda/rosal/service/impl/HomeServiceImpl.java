@@ -29,4 +29,10 @@ public class HomeServiceImpl implements IHomeService {
         logger.info("Inicia guardado de todos los apartamentos");
         homeRepository.saveAll(homes);
     }
+
+    @Override
+    public void save(Home home) {
+        logger.info("Inicia guardado del aparamento");
+        homeRepository.save(home);
+    }
 }

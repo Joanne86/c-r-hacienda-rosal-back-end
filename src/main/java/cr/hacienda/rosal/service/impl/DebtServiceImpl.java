@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 
 @Service
 public class DebtServiceImpl implements IDebtorService {
@@ -29,6 +28,11 @@ public class DebtServiceImpl implements IDebtorService {
     @Override
     public void saveAll(Iterable<Debt> debtors) {
         debtRepository.saveAll(debtors);
+    }
+
+    @Override
+    public void save(Debt debt) {
+        debtRepository.save(debt);
     }
 
     @Override

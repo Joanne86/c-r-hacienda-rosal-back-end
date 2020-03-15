@@ -5,5 +5,6 @@ import cr.hacienda.rosal.entities.Home;
 
 public interface IHomeService {
     Iterable<UserDto> getAllUsers();
-    void saveAll(Iterable<Home> users);
+    void saveAll(Iterable<Home> homes);
+    void save(Home home);
 }

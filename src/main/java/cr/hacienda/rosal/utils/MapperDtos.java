@@ -1,15 +1,18 @@
 package cr.hacienda.rosal.utils;
 
-import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.Debt;
 import cr.hacienda.rosal.entities.Home;
 import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.entities.UserType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class MapperDtos {
+
+    private static Logger logger = LoggerFactory.getLogger(MapperDtos.class);
 
     /**
      * Metodo para mapear los datos que se guardaran en base de datos USER
@@ -25,17 +28,16 @@ public class MapperDtos {
         return usersDB;
     }
 
-    private static User getUser(UserDto u){
+    public static User getUser(UserDto u){
+        logger.info("Inicia mapeo de userDto a User");
         User user = new User();
-        UserType userType = new UserType();
 
+        user.setDocumentNumber(u.getDocumentNumber());
+        UserType userType = new UserType();
         userType.setId(1);
         userType.setRol(Mapps.getUserType().get(1));
-
         user.setCellphone(u.getCellphone());
-        user.setDocumentNumber(u.getDocumentNumber());
         user.setName(u.getName());
-
         user.setUserType(userType);
         return user;
     }
@@ -62,7 +64,7 @@ public class MapperDtos {
         return homes;
     }
 
-    private static Home getHome(UserDto userDto){
+    public static Home getHome(UserDto userDto){
         Home home = new Home();
         home.setTowerNumberHome(userDto.getTowerNumberHome());
         home.setUser(getUser(userDto));
@@ -99,7 +101,7 @@ public class MapperDtos {
         }
         return debts;
     }
-    private static Debt getDebt(UserDto userDto){
+    public static Debt getDebt(UserDto userDto){
         Debt debt = new Debt();
         debt.setTowerNumberHome(userDto.getTowerNumberHome());
         debt.setAmount(userDto.getDebt());

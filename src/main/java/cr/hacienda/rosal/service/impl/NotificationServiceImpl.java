@@ -1,7 +1,6 @@
 package cr.hacienda.rosal.service.impl;
 
 import cr.hacienda.rosal.dto.MessageDto;
-import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.repository.UserRepository;
 import cr.hacienda.rosal.service.INotificationService;
 import cr.hacienda.rosal.utils.EncryptionUtil;
@@ -47,11 +46,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     private  SnsHandler snSHandler;
 
-    @Override
-    public void save(Iterable<User> users) {
-        logger.info("Guardando en base de datos los residentes");
-        userRepository.saveAll(users);
-    }
+
 
     @Override
     public void sendMessageToAllResidents(String message) {
@@ -91,6 +86,19 @@ public class NotificationServiceImpl implements INotificationService {
             logger.error("ocurrio un error al agregar los numeros de telefono de todo el conjunto");
         }
     }
+
+    @Override
+    public void addNumber(String cellphone) {
+        try {
+            setDataToConnectSNSToAllResidents();
+            if(this.snSHandler != null){
+                this.snSHandler.addNumber(this.awsTopicAllResidentsDec, cellphone);
+            }
+        } catch (Exception e) {
+            logger.error("ocurrio un error al agregar los numeros de telefono de todo el conjunto");
+        }
+    }
+
     @Override
     public void addDebtorsNumber(ArrayList<String> cellphones){
         try {

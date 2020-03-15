@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @Column (name = "document_number")
+    @Column (name = "document_number", unique = true)
     private String documentNumber;
     @Column
     private String name;

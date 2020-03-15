@@ -75,6 +75,12 @@ public class SnsHandler {
         }
     }
 
+    public void addNumber(String awsTopic, String cellphone){
+        getAmazonSNSClient();
+        logger.info("Agregando numero de telefono: {}", cellphone);
+        subscribeToTopic(this.snsClient, awsTopic, "sms", cellphone);
+    }
+
     public void subscribeToTopic(AmazonSNSClient snsClient, String topicArn,
                                         String protocol, String endpoint) {
         SubscribeRequest subscribe = new SubscribeRequest(topicArn, protocol,

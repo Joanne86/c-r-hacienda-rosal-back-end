@@ -6,6 +6,7 @@ import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.service.IDebtorService;
 import cr.hacienda.rosal.service.IHomeService;
 import cr.hacienda.rosal.service.INotificationService;
+import cr.hacienda.rosal.service.IUserService;
 import cr.hacienda.rosal.utils.MapperDtos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,17 +28,19 @@ public class NotificationController {
     IHomeService homeService;
     @Autowired
     IDebtorService debtorService;
+    @Autowired
+    IUserService userService;
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS y los guarda en base de datos
      * @param users lista de residentes
-     * @return
+     * @return estado de la peticion
      */
 
     @PostMapping("/add-all-numbers")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
         // mirar si hacerlo en hilos
-        notificationService.save(MapperDtos.mapUserDtoToUser(users));
+        userService.saveAll(MapperDtos.mapUserDtoToUser(users));
 
         debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
 
@@ -54,8 +57,8 @@ public class NotificationController {
      */
 
     @PostMapping ("/add-debtors-numbers")
-    public ResponseEntity<Void> addDebtorsNumbers(@RequestBody List<User> users){
-
+    public ResponseEntity<Void> addDebtorsNumbers(@RequestBody  ArrayList<UserDto> users){
+        notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
