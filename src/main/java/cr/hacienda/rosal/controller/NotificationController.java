@@ -38,8 +38,10 @@ public class NotificationController {
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
         // mirar si hacerlo en hilos
         notificationService.save(MapperDtos.mapUserDtoToUser(users));
-        homeService.saveAll(MapperDtos.mapHomes(users));
+
         debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
+
+        homeService.saveAll(MapperDtos.mapHomes(users));
 
         notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
         return new ResponseEntity<>(HttpStatus.OK);

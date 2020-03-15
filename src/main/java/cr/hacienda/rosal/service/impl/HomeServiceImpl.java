@@ -19,14 +19,14 @@ public class HomeServiceImpl implements IHomeService {
     HomeRepository homeRepository;
 
     @Override
-    public void saveAll(Iterable<Home> homes) {
-        logger.info("Inicia guardado de todos los apartamentos");
-        homeRepository.saveAll(homes);
-    }
-
-    @Override
     public Iterable<UserDto> getAllUsers() {
         logger.info("Obteniendo usuarios de base de datos");
         return MapperDtos.mapUserToUserDto(homeRepository.findAllResidents());
+    }
+
+    @Override
+    public void saveAll(Iterable<Home> homes) {
+        logger.info("Inicia guardado de todos los apartamentos");
+        homeRepository.saveAll(homes);
     }
 }

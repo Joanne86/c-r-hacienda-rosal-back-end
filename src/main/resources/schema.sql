@@ -16,20 +16,20 @@ create table if not exists user (
     constraint `id_type_ibfk_1` foreign key (id_type) references user_type (id)
 );
 
+create table if not exists debt (
+	tower_number_home varchar (15) not null primary key,
+	amount double not null,
+    months int (3) not null
+);
+
 create table if not exists home (
 	tower_number_home varchar (15) not null primary key,
     document_number varchar(10) not null,
+    tower_number_home_debt varchar (15) not null,
     KEY document_number (document_number),
-    constraint `document_number_ibfk_1` foreign key (document_number) references user (document_number)
-);
-
-create table if not exists debt (
-	id int (2) not null auto_increment primary key,
-	amount double not null,
-    months int (3) not null,
-    tower_number_home varchar (15) not null,
-    KEY tower_number_home (tower_number_home),
-    constraint `id_debt_ibfk_1` foreign key (tower_number_home) references home (tower_number_home)
+    constraint `document_number_ibfk_1` foreign key (document_number) references user (document_number),
+    KEY tower_number_home_debt (tower_number_home_debt),
+    constraint `tower_number_home_debt_ibfk_2` foreign key (tower_number_home_debt) references debt (tower_number_home)
 );
 
 create table if not exists type_request (
