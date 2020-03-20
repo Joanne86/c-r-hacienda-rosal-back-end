@@ -91,13 +91,18 @@ public class SnsHandler {
         logger.info("Subscribe result: {}", subscribeResult);
     }
 
-    public void deleteSubcriptor(){
+    public void deleteSubcriptor(String cellphone){
+        logger.info("numero: {}", cellphone);
+        //probar desde el front
+        cellphone = "+".concat(cellphone);
+        logger.info("numero: {}", cellphone);
         ListSubscriptionsResult result = this.snsClient.listSubscriptions();
         for (Subscription sub : result.getSubscriptions()) {
-            // hacer condicion de busqueda
-            System.out.println(sub.getEndpoint());
-            System.out.println("borrando arn: "+ sub.getSubscriptionArn());
-            this.snsClient.unsubscribe(sub.getSubscriptionArn());
+            logger.info("subscripciones: {}, numeros: {}", sub.getSubscriptionArn(), sub.getEndpoint());
+            if(cellphone.equals(sub.getEndpoint())){
+                logger.info("borra el numero: {}", cellphone);
+                this.snsClient.unsubscribe(sub.getSubscriptionArn());
+            }
         }
 
     }

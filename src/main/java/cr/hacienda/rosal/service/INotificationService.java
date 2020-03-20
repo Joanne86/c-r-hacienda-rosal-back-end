@@ -13,5 +13,5 @@ public interface INotificationService {
     void addDebtorsNumber(ArrayList<String> cellphones);
     void getAllNumber();
     void getAllDebtorsNumber();
-    void deleteNumber();
+    void deleteNumber(String cellphone);
 }

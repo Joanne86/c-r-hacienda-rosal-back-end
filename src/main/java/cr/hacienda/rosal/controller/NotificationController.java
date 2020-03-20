@@ -116,8 +116,8 @@ public class NotificationController {
     }
 
     @GetMapping("/delete-number")
-    public void delete(){
-        notificationService.deleteNumber();
+    public void delete(@RequestParam String cellphone){
+        notificationService.deleteNumber(cellphone);
     }
 
 }
