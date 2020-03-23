@@ -51,7 +51,7 @@ public class MapperDtos {
         ArrayList<String> cellphones = new ArrayList<>();
 
         for (UserDto u: users){
-            cellphones.add(u.getCellphone());
+            cellphones.add("+57".concat(u.getCellphone()));
         }
         return cellphones;
     }

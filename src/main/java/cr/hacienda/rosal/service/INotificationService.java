@@ -9,8 +9,9 @@ public interface INotificationService {
     void sendMessageToAllDebtors(String message);
     void sendMessageToOne(MessageDto messageDto);
     void addAllNumbers(ArrayList<String> cellphones);
-    void addNumber(String cellphone);
     void addDebtorsNumber(ArrayList<String> cellphones);
+    void addNumber(String cellphone);
+    void addDebtorNumber(String cellphone);
     void getAllNumber();
     void getAllDebtorsNumber();
     void deleteNumber(String cellphone);

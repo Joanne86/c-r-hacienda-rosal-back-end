@@ -2,7 +2,6 @@ package cr.hacienda.rosal.controller;
 
 import cr.hacienda.rosal.dto.MessageDto;
 import cr.hacienda.rosal.dto.UserDto;
-import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.service.IDebtorService;
 import cr.hacienda.rosal.service.IHomeService;
 import cr.hacienda.rosal.service.INotificationService;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -89,8 +87,8 @@ public class NotificationController {
 
     /**
      * Metodo que envia un mensaje igual a todos los deudores del conjunto
-     * @param message
-     * @return
+     * @param message mensaje que envia a los deudores
+     * @return respuesta
      */
 
     @PostMapping ("/send-message-to-debtors")
@@ -115,9 +113,33 @@ public class NotificationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/delete-number")
-    public void delete(@RequestParam String cellphone){
+    /**
+     * Metodo que elimina un numero de telefono en aws
+     * @param cellphone telefono
+     */
+    @DeleteMapping("/delete-number")
+    public ResponseEntity<Void> delete(@RequestParam String cellphone){
         notificationService.deleteNumber(cellphone);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Metodo que agrega un numero de telefono en aws
+     * @param cellphone telefono
+     */
+    @PostMapping("/add-number")
+    public ResponseEntity<Void> addNumber(@RequestParam String cellphone){
+        notificationService.addNumber(cellphone);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    /**
+     * Metodo que agrega un numero de telefono de deudor en aws
+     * @param cellphone telefono
+     */
+    @PostMapping("/add-debtor-number")
+    public ResponseEntity<Void> addDebtorNumber(@RequestParam String cellphone){
+        notificationService.addDebtorNumber(cellphone);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

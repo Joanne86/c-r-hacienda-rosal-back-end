@@ -77,6 +77,7 @@ public class SnsHandler {
 
     public void addNumber(String awsTopic, String cellphone){
         getAmazonSNSClient();
+        cellphone = "+57".concat(cellphone);
         logger.info("Agregando numero de telefono: {}", cellphone);
         subscribeToTopic(this.snsClient, awsTopic, "sms", cellphone);
     }
@@ -92,11 +93,14 @@ public class SnsHandler {
     }
 
     public void deleteSubcriptor(String cellphone){
+        getAmazonSNSClient();
         logger.info("numero: {}", cellphone);
-        //probar desde el front
-        cellphone = "+".concat(cellphone);
+        cellphone = "+57".concat(cellphone);
         logger.info("numero: {}", cellphone);
+
         ListSubscriptionsResult result = this.snsClient.listSubscriptions();
+
+        logger.info("result tamaño: {}", result.getSubscriptions().size());
         for (Subscription sub : result.getSubscriptions()) {
             logger.info("subscripciones: {}, numeros: {}", sub.getSubscriptionArn(), sub.getEndpoint());
             if(cellphone.equals(sub.getEndpoint())){

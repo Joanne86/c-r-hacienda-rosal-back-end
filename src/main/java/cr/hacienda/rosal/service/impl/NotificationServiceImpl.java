@@ -100,10 +100,24 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
+    public void addDebtorNumber(String cellphone) {
+        try {
+            setDataToConnectSNSToAllDebtors();
+            if(this.snSHandler != null){
+                this.snSHandler.addNumber(this.awsTopicDebtorsDec, cellphone);
+            }
+        } catch (Exception e) {
+            logger.error("ocurrio un error al agregar el numero del deudor");
+        }
+    }
+
+    @Override
     public void addDebtorsNumber(ArrayList<String> cellphones){
         try {
             setDataToConnectSNSToAllDebtors();
-            this.snSHandler.addNumbers(this.awsTopicDebtorsDec, cellphones);
+            if(this.snSHandler != null){
+                this.snSHandler.addNumbers(this.awsTopicDebtorsDec, cellphones);
+            }
         } catch (Exception e) {
             logger.error("ocurrio un error al agregar los numeros de los deudores");
         }
@@ -122,7 +136,9 @@ public class NotificationServiceImpl implements INotificationService {
     public void deleteNumber(String cellphone) {
         try {
             setDataToConnectSNSToAllResidents();
-            this.snSHandler.deleteSubcriptor(cellphone);
+            if(this.snSHandler != null) {
+                this.snSHandler.deleteSubcriptor(cellphone);
+            }
         } catch (Exception e) {
             logger.error("Ocurrio al eliminar numero de celular de aws");
         }
@@ -154,8 +170,9 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     private void setupNotificationToAllResidents(String arnTopic){
-        logger.info("Trayendo datos de conexion...");
+        logger.info("Trayendo datos de conexion... topic: {}", arnTopic);
         this.awsTopicAllResidentsDec = EncryptionUtil.decode(arnTopic);
+        logger.info("topic: {}", this.awsTopicAllResidentsDec);
         decAccess();
     }
 
