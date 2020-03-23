@@ -67,4 +67,16 @@ public class ResidentController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @PutMapping ("/update")
+    public ResponseEntity<Void> updateResident(@RequestBody UserDto userDto){
+        try{
+            userService.update(MapperDtos.getUser(userDto));
+            debtorService.update(MapperDtos.getDebt(userDto));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            logger.info("Ocurrio un error al actualizar residente: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

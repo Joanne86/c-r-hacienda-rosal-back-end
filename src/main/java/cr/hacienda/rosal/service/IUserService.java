@@ -6,4 +6,7 @@ public interface IUserService {
 
     void saveAll(Iterable<User> users);
     void save(User user);
+    User update(User user);
+
+
 }

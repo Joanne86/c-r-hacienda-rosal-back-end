@@ -44,4 +44,14 @@ public class DebtServiceImpl implements IDebtorService {
     public Debt getDebtInfo() {
         return null;
     }
+
+    @Override
+    public Debt update(Debt debt) {
+        Debt debtReturn = null;
+        logger.info("Inicia actualizacion de debt en base de datos");
+        if (debtRepository.findByTowerNumberHome(debt.getTowerNumberHome()).isPresent()) {
+            debtReturn= debtRepository.save(debt);
+        }
+        return debtReturn;
+    }
 }

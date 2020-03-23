@@ -26,4 +26,14 @@ public class UserServiceImpl implements IUserService {
         logger.info("Guardando en base de datos del residente");
         userRepository.save(user);
     }
+
+    @Override
+    public User update(User user) {
+        User userReturn = null;
+        logger.info("Inicia actualizacion de user en base de datos");
+        if (userRepository.findByDocumentNumber(user.getDocumentNumber()).isPresent()) {
+            userReturn= userRepository.save(user);
+        }
+        return userReturn;
+    }
 }
