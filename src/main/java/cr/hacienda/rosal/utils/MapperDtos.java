@@ -1,15 +1,19 @@
 package cr.hacienda.rosal.utils;
 
+import cr.hacienda.rosal.dto.CommentaryDto;
+import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
-import cr.hacienda.rosal.entities.Debt;
-import cr.hacienda.rosal.entities.Home;
-import cr.hacienda.rosal.entities.User;
-import cr.hacienda.rosal.entities.UserType;
+import cr.hacienda.rosal.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
 
+@Service
 public class MapperDtos {
 
     private static Logger logger = LoggerFactory.getLogger(MapperDtos.class);
@@ -107,5 +111,67 @@ public class MapperDtos {
         debt.setAmount(userDto.getDebt());
         debt.setMonths(userDto.getMonths());
         return debt;
+    }
+
+    public static DebtDto getDebt(Optional<Debt> debt){
+        DebtDto debtDto = new DebtDto();
+        if(debt.isPresent()){
+            debtDto.setAmount(debt.get().getAmount());
+            debtDto.setMonths(debt.get().getMonths());
+            debtDto.setTowerNumberHome(debt.get().getTowerNumberHome());
+        }
+        return debtDto;
+    }
+
+    public static Iterable<CommentaryDto> mapCommetaryToCommentaryDtoList(Iterable<Commentary> commentaryList){
+        ArrayList<CommentaryDto> commentaryDtoList = new ArrayList<>();
+
+        for (Commentary c: commentaryList){
+            commentaryDtoList.add(getCommentaryDto(c));
+        }
+        return commentaryDtoList;
+    }
+
+    private static CommentaryDto getCommentaryDto(Commentary commentary){
+        CommentaryDto commentaryDto = new CommentaryDto();
+
+        commentaryDto.setId(commentary.getId());
+        commentaryDto.setMessage(commentary.getMessage());
+        commentaryDto.setDocument(commentary.getUser().getDocumentNumber());
+        commentaryDto.setName(commentary.getUser().getName());
+        commentaryDto.setPublishDate(commentary.getPublishDate());
+        commentaryDto.setIdNews(commentary.getNews().getId());
+        return commentaryDto;
+    }
+
+    public static Commentary getCommentary(CommentaryDto commentaryDto){
+        Commentary commentary = new Commentary();
+        commentary.setMessage(commentaryDto.getMessage());
+        commentary.setPublishDate(getDateString(new Date()));
+        User user = new User();
+        user.setDocumentNumber(commentaryDto.getDocument());
+        user.setCellphone(commentaryDto.getCellphone());
+        user.setName(commentaryDto.getName());
+
+        UserType userType = new UserType();
+        userType.setId(1);
+        userType.setRol(Mapps.getUserType().get(1));
+
+        user.setUserType(userType);
+        commentary.setUser(user);
+
+        News news = new News();
+        news.setId(commentaryDto.getIdNews());
+        news.setInformation(commentaryDto.getInformation());
+        news.setPublish(commentaryDto.getPublishDate());
+
+        commentary.setNews(news);
+
+        return commentary;
+    }
+
+    public static String getDateString(Date date){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(date);
     }
 }

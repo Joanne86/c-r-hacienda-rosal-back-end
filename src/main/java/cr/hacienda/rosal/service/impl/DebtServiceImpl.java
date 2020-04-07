@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.service.impl;
 
+import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.Debt;
 import cr.hacienda.rosal.repository.DebtRepository;
@@ -41,8 +42,9 @@ public class DebtServiceImpl implements IDebtorService {
     }
 
     @Override
-    public Debt getDebtInfo() {
-        return null;
+    public DebtDto getDebtInfo(String towerNumberHome) {
+        logger.info("Obteniendo deuda actual del residente");
+        return MapperDtos.getDebt(debtRepository.findByTowerNumberHome(towerNumberHome));
     }
 
     @Override

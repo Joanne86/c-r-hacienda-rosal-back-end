@@ -1,11 +1,10 @@
 package cr.hacienda.rosal.entities;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name="comentary")
-public class Comentary {
+@Table(name="commentary")
+public class Commentary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -13,7 +12,7 @@ public class Comentary {
     @Column
     private String message;
     @Column (name="publish_date")
-    private Date publishDate;
+    private String publishDate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "document", referencedColumnName = "document_number" )
     private User user;
@@ -37,11 +36,11 @@ public class Comentary {
         this.message = message;
     }
 
-    public Date getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 

@@ -1,20 +1,10 @@
-package cr.hacienda.rosal.entities;
+package cr.hacienda.rosal.dto;
 
-import javax.persistence.*;
-import java.util.Date;
-
-@Entity
-@Table(name="news")
-public class News {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+public class NewsDto {
     private int id;
-    @Column
     private String information;
-    @Column (name = "publish_date")
     private String publish;
+    private int commentaries;
 
     public int getId() {
         return id;
@@ -40,12 +30,11 @@ public class News {
         this.publish = publish;
     }
 
-    @Override
-    public String toString() {
-        return "News{" +
-                "id=" + id +
-                ", information='" + information + '\'' +
-                ", publish=" + publish +
-                '}';
+    public int getCommentaries() {
+        return commentaries;
+    }
+
+    public void setCommentaries(int commentaries) {
+        this.commentaries = commentaries;
     }
 }

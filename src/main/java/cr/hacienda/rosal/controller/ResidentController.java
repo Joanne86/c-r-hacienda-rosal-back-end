@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.controller;
 
+import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.service.IDebtorService;
 import cr.hacienda.rosal.service.IHomeService;
@@ -37,8 +38,6 @@ public class ResidentController {
         return new ResponseEntity<>(debtorService.getAllDebtors(), HttpStatus.OK);
     }
 
-
-
     @PostMapping("/save-resident")
     public ResponseEntity<Void> saveResident(@RequestBody UserDto userDto){
         try{
@@ -46,6 +45,9 @@ public class ResidentController {
             debtorService.save(MapperDtos.getDebt(userDto));
             homeService.save(MapperDtos.getHome(userDto));
             notificationService.addNumber(userDto.getCellphone());
+            if(userDto.getDebt()>0 && userDto.getMonths()>0){
+                notificationService.addDebtorNumber(userDto.getCellphone());
+            }
             return new ResponseEntity<>(HttpStatus.OK);
 
         }catch (Exception e){
@@ -65,6 +67,17 @@ public class ResidentController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping ("/debt-info")
+    public ResponseEntity<DebtDto> getDebtInfo(@RequestParam String towerNumberHome){
+        DebtDto debtDto;
+        try{
+            debtDto= debtorService.getDebtInfo(towerNumberHome);
+            return new ResponseEntity<>(debtDto,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

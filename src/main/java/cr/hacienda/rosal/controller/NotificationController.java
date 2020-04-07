@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -35,7 +36,7 @@ public class NotificationController {
      * @return estado de la peticion
      */
 
-    @PostMapping("/add-all-numbers")
+    @PostMapping("/add-all-residents")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
         // mirar si hacerlo en hilos
         userService.saveAll(MapperDtos.mapUserDtoToUser(users));
@@ -82,6 +83,7 @@ public class NotificationController {
     @PostMapping ("/send-message-to-one")
     public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
         notificationService.sendMessageToOne(messageDto);
+        // Thread.sleep(4000);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -118,7 +120,7 @@ public class NotificationController {
      * @param cellphone telefono
      */
     @DeleteMapping("/delete-number")
-    public ResponseEntity<Void> delete(@RequestParam String cellphone){
+    public ResponseEntity<Void> deleteNumber(@RequestParam String cellphone){
         notificationService.deleteNumber(cellphone);
         return new ResponseEntity<>(HttpStatus.OK);
     }

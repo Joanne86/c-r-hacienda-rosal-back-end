@@ -62,12 +62,12 @@ create table if not exists request (
 create table if not exists news (
 	id int not null auto_increment primary key,
     information varchar(800) not null,
-    publish_date date not null
+    publish_date  varchar(40) not null
 );
-create table if not exists comentary (
+create table if not exists commentary (
 	id int not null auto_increment primary key,
     message varchar(800) not null,
-    publish_date date not null,
+    publish_date varchar(40) not null,
     document varchar(10) not null,
     id_news int not null,
     KEY document (document),

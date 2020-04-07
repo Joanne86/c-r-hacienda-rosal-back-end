@@ -1,7 +1,6 @@
 package cr.hacienda.rosal.entities;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "request")
@@ -16,7 +15,7 @@ public class Request {
     @Column
     private String response;
     @Column(name = "publish_date")
-    private Date publishDate;
+    private String publishDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_state", referencedColumnName = "id")
@@ -54,11 +53,11 @@ public class Request {
         this.response = response;
     }
 
-    public Date getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 
