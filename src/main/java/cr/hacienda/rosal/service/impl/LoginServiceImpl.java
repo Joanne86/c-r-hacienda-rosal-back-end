@@ -5,6 +5,7 @@ import cr.hacienda.rosal.entities.Home;
 import cr.hacienda.rosal.repository.HomeRepository;
 import cr.hacienda.rosal.service.ILoginService;
 import cr.hacienda.rosal.utils.MapperDtos;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,14 @@ public class LoginServiceImpl implements ILoginService {
     HomeRepository homeRepository;
 
     @Override
-    public UserDto getSession(String username) throws Exception {
+    public UserDto getSession(String username) throws NotFoundException {
         Home home  = homeRepository.findByDocumentNumber(username);
         if(home != null){
             logger.info("Inicia mapeo de base de datos");
             return  MapperDtos.getUserDto(home);
         }else{
             logger.info("No se encontro registros con ese usuario");
-            throw new Exception();
+            throw new NotFoundException(username);
         }
     }
 }

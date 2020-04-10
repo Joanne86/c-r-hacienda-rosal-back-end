@@ -2,6 +2,7 @@ package cr.hacienda.rosal.utils;
 
 import cr.hacienda.rosal.dto.CommentaryDto;
 import cr.hacienda.rosal.dto.DebtDto;
+import cr.hacienda.rosal.dto.RequestDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.*;
 import org.slf4j.Logger;
@@ -173,5 +174,52 @@ public class MapperDtos {
     public static String getDateString(Date date){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
+    }
+
+    public static Iterable<RequestDto> mapRequestDto(Iterable<Request> requestList) {
+        ArrayList<RequestDto> requestDtoList = new ArrayList<>();
+        for(Request r: requestList){
+            requestDtoList.add(getRequestDto(r));
+        }
+        return requestDtoList;
+    }
+
+    public static RequestDto getRequestDto(Request request){
+        RequestDto requestDto = new RequestDto();
+        requestDto.setId(request.getId());
+        requestDto.setMessage(request.getMessage());
+        requestDto.setPublishDate(request.getPublishDate());
+        requestDto.setResponse(request.getResponse());
+        requestDto.setType(request.getTypeRequest().getId());
+        requestDto.setUserDto(getUserDto(request));
+        requestDto.setState(request.getStateRequest().getState());
+        return requestDto;
+    }
+
+    public static UserDto getUserDto(Request request){
+        return getUserDto(request.getHome());
+    }
+
+    public static Request getRequest(RequestDto requestDto) {
+        logger.info("Comienza mapeo del request");
+        Request request = new Request();
+        request.setMessage(requestDto.getMessage());
+        request.setPublishDate(getDateString(new Date()));
+
+        StateRequest stateRequest = new StateRequest();
+        stateRequest.setId(2);
+
+        stateRequest.setState(Mapps.getSateRequest().get(2));
+        request.setStateRequest(stateRequest);
+
+        request.setHome(getHome(requestDto.getUserDto()));
+
+        TypeRequest typeRequest = new TypeRequest();
+        typeRequest.setId(requestDto.getType());
+        typeRequest.setAffair(Mapps.getTypeRequest().get(requestDto.getType()));
+
+        request.setTypeRequest(typeRequest);
+        logger.info("Termina mapeo del request");
+        return request;
     }
 }

@@ -66,4 +66,17 @@ public class UserDto {
     public void setTowerNumberHome(String towerNumberHome) {
         this.towerNumberHome = towerNumberHome;
     }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "documentNumber='" + documentNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", cellphone='" + cellphone + '\'' +
+                ", towerNumberHome='" + towerNumberHome + '\'' +
+                ", userType=" + userType +
+                ", months=" + months +
+                ", debt=" + debt +
+                '}';
+    }
 }
