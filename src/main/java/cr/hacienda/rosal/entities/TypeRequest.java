@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "type_request")
-public class TypeRequest {
+public class  TypeRequest {
 
     @Id
     @Column

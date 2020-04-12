@@ -18,7 +18,7 @@ public class RequestServiceImpl implements IRequestService {
     RequestRepository requestRepository;
 
     @Override
-    public void sendRequest(RequestDto requestDto) {
+        public void sendRequest(RequestDto requestDto) {
         requestRepository.save(MapperDtos.getRequest(requestDto));
     }
 

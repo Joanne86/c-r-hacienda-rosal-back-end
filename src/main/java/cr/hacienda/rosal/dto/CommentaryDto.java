@@ -4,7 +4,7 @@ public class CommentaryDto {
     private int id;
     private String message;
     private String publishDate;
-    private String document;
+            private String document;
     private int idNews;
     private String name;
     private String cellphone;
