@@ -13,13 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Timer;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
-
 
     @Autowired
     INotificationService notificationService;
@@ -38,15 +36,16 @@ public class NotificationController {
 
     @PostMapping("/add-all-residents")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
-        // mirar si hacerlo en hilos
-        userService.saveAll(MapperDtos.mapUserDtoToUser(users));
+        try{
+            userService.saveAll(MapperDtos.mapUserDtoToUser(users));
+            debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
+            homeService.saveAll(MapperDtos.mapHomes(users));
+            notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
-
-        homeService.saveAll(MapperDtos.mapHomes(users));
-
-        notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -57,8 +56,12 @@ public class NotificationController {
 
     @PostMapping ("/add-debtors-numbers")
     public ResponseEntity<Void> addDebtorsNumbers(@RequestBody  ArrayList<UserDto> users){
-        notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -70,8 +73,13 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-all")
     public ResponseEntity<Void> sendMessageToAll(@RequestBody String message){
-        notificationService.sendMessageToAllResidents(message);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.sendMessageToAllResidents(message);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -82,9 +90,12 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-one")
     public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
-        notificationService.sendMessageToOne(messageDto);
-        // Thread.sleep(4000);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.sendMessageToOne(messageDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -95,8 +106,13 @@ public class NotificationController {
 
     @PostMapping ("/send-message-to-debtors")
     public ResponseEntity<Void> sendMessageToDebtors(@RequestParam String message){
-        notificationService.sendMessageToAllDebtors(message);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.sendMessageToAllDebtors(message);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -105,14 +121,24 @@ public class NotificationController {
      */
     @GetMapping ("/get-all-number")
     public ResponseEntity<Iterable<String>> getAllNumbers(){
-        notificationService.getAllNumber();
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.getAllNumber();
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @GetMapping ("/get-all-debtors-number")
     public ResponseEntity<Iterable<String>> getAllDebtorsNumbers(){
-        notificationService.getAllDebtorsNumber();
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.getAllDebtorsNumber();
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -121,8 +147,13 @@ public class NotificationController {
      */
     @DeleteMapping("/delete-number")
     public ResponseEntity<Void> deleteNumber(@RequestParam String cellphone){
-        notificationService.deleteNumber(cellphone);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.deleteNumber(cellphone);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -131,8 +162,13 @@ public class NotificationController {
      */
     @PostMapping("/add-number")
     public ResponseEntity<Void> addNumber(@RequestParam String cellphone){
-        notificationService.addNumber(cellphone);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.addNumber(cellphone);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
     /**
      * Metodo que agrega un numero de telefono de deudor en aws
@@ -140,8 +176,12 @@ public class NotificationController {
      */
     @PostMapping("/add-debtor-number")
     public ResponseEntity<Void> addDebtorNumber(@RequestParam String cellphone){
-        notificationService.addDebtorNumber(cellphone);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            notificationService.addDebtorNumber(cellphone);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

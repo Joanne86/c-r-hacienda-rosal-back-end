@@ -30,14 +30,12 @@ public class NewController {
 
     @GetMapping("/get-news")
     public ResponseEntity<Iterable<NewsDto>> getNews(){
-        Iterable<NewsDto> news = newService.getNews();
-        return new ResponseEntity<>(news, HttpStatus.OK);
-        /*try{
-
+        try{
+            Iterable<NewsDto> news = newService.getNews();
+            return new ResponseEntity<>(news, HttpStatus.OK);
         }catch (Exception e){
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/
+        }
     }
 
     @PostMapping("/save-commentary")

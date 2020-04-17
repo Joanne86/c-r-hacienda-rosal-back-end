@@ -1,7 +1,0 @@
-TAREAS:
-
-manejar errores con excepciones
-
-
-
-
