@@ -41,6 +41,9 @@ public class NotificationController {
             debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
             homeService.saveAll(MapperDtos.mapHomes(users));
             notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
+            Thread.sleep(3000);
+            String message = "usted acaba de ser registrado en la aplicación web del conjunto residencial ingrese a este link para acceder -> https://conjunto-hacienda-rosal.com/#/login ingresando su cedula en ambos campos";
+            notificationService.sendMessageToAllResidents(message);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
