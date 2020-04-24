@@ -27,6 +27,16 @@ public class NewController {
         }
     }
 
+    @PutMapping("/update-new")
+    public ResponseEntity<NewsDto> editPublish(@RequestBody NewsDto newsDto){
+        try{
+            newService.updatePublish(newsDto);
+            return new ResponseEntity<>(newsDto,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(newsDto,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @GetMapping("/get-news")
     public ResponseEntity<Iterable<NewsDto>> getNews(){

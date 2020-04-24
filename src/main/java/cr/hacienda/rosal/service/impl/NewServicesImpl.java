@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class NewServicesImpl implements INewService {
@@ -68,5 +69,18 @@ public class NewServicesImpl implements INewService {
     @Override
     public void saveCommentary(CommentaryDto commentaryDto) {
         commentaryRepository.save(MapperDtos.getCommentary(commentaryDto));
+    }
+
+    @Override
+    public NewsDto updatePublish(NewsDto newsDto) {
+
+        Optional<News> news = newRepository.findById(newsDto.getId());
+        if(news.isPresent()){
+            news.get().setInformation(newsDto.getInformation());
+            news.get().setPublish(MapperDtos.getDateString(new Date()));
+            newRepository.save(news.get());
+            newsDto.setPublish(news.get().getPublish());
+        }
+        return newsDto;
     }
 }

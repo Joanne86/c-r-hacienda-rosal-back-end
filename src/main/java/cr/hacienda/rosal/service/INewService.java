@@ -11,4 +11,5 @@ public interface INewService {
     Iterable<CommentaryDto> getCommentaries(int idNew);
     Iterable<NewsDto> getNews();
     void saveCommentary(CommentaryDto commentaryDto);
+    NewsDto updatePublish(NewsDto newsDto);
 }

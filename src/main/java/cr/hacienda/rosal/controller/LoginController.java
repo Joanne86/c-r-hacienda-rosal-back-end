@@ -25,6 +25,7 @@ public class LoginController {
         }catch (NotFoundException e){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
