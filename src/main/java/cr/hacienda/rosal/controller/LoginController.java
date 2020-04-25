@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.controller;
 
+import cr.hacienda.rosal.dto.CredentialDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.service.ILoginService;
 import javassist.NotFoundException;
@@ -17,10 +18,13 @@ public class LoginController {
     ILoginService loginService;
 
     @GetMapping("/get-user")
-    public ResponseEntity<UserDto> getUser(@RequestParam String userName){
+    public ResponseEntity<UserDto> getUser(@RequestParam String user, String password){
         UserDto userDto;
         try{
-            userDto=loginService.getSession(userName);
+            CredentialDto credentialDto = new CredentialDto();
+            credentialDto.setUser(user);
+            credentialDto.setPassword(password);
+            userDto=loginService.getSession(credentialDto);
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }catch (NotFoundException e){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

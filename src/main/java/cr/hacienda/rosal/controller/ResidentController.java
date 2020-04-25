@@ -2,10 +2,7 @@ package cr.hacienda.rosal.controller;
 
 import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.UserDto;
-import cr.hacienda.rosal.service.IDebtorService;
-import cr.hacienda.rosal.service.IHomeService;
-import cr.hacienda.rosal.service.INotificationService;
-import cr.hacienda.rosal.service.IUserService;
+import cr.hacienda.rosal.service.*;
 import cr.hacienda.rosal.utils.MapperDtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,8 @@ public class ResidentController {
 
     @Autowired
     INotificationService notificationService;
+    @Autowired
+    ILoginService loginService;
 
     @GetMapping("/get-debtors")
     public ResponseEntity<Iterable<UserDto>> getDebtors(){
@@ -44,9 +43,11 @@ public class ResidentController {
             userService.save(MapperDtos.getUser(userDto));
             debtorService.save(MapperDtos.getDebt(userDto));
             homeService.save(MapperDtos.getHome(userDto));
-            notificationService.addNumber(userDto.getCellphone());
+            loginService.save(MapperDtos.getCredentialOfUserDto(userDto));
+
+            //notificationService.addNumber(userDto.getCellphone());
             if(userDto.getDebt()>0 && userDto.getMonths()>0){
-                notificationService.addDebtorNumber(userDto.getCellphone());
+                //notificationService.addDebtorNumber(userDto.getCellphone());
             }
             return new ResponseEntity<>(HttpStatus.OK);
 

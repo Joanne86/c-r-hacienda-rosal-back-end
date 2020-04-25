@@ -2,10 +2,7 @@ package cr.hacienda.rosal.controller;
 
 import cr.hacienda.rosal.dto.MessageDto;
 import cr.hacienda.rosal.dto.UserDto;
-import cr.hacienda.rosal.service.IDebtorService;
-import cr.hacienda.rosal.service.IHomeService;
-import cr.hacienda.rosal.service.INotificationService;
-import cr.hacienda.rosal.service.IUserService;
+import cr.hacienda.rosal.service.*;
 import cr.hacienda.rosal.utils.MapperDtos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +24,8 @@ public class NotificationController {
     IDebtorService debtorService;
     @Autowired
     IUserService userService;
+    @Autowired
+    ILoginService loginService;
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS y los guarda en base de datos
@@ -40,7 +39,8 @@ public class NotificationController {
             userService.saveAll(MapperDtos.mapUserDtoToUser(users));
             debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
             homeService.saveAll(MapperDtos.mapHomes(users));
-            notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
+            loginService.saveAll(MapperDtos.mapUserDtosToCredentals(users));
+            //notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
             /*String message = "usted acaba de ser registrado en la aplicación web del conjunto residencial ingrese a este link para acceder -> https://conjunto-hacienda-rosal.com/#/login ingresando su cedula en ambos campos";
             notificationService.sendMessageToAllResidents(message);*/
             return new ResponseEntity<>(HttpStatus.OK);
@@ -59,7 +59,7 @@ public class NotificationController {
     @PostMapping ("/add-debtors-numbers")
     public ResponseEntity<Void> addDebtorsNumbers(@RequestBody  ArrayList<UserDto> users){
         try{
-            notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
+            //notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

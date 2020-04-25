@@ -11,5 +11,6 @@ insert into state_request values (2, 'Sin respuesta');
 insert into user values ('123456789', 'Viviana Anacona', '0', 2);
 insert into debt values ('0', 0, 0);
 insert into home values ('0', '123456789', '0');
+insert into credential values ('123456789', '123456789','0');
 
  

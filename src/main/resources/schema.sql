@@ -32,6 +32,14 @@ create table if not exists home (
     constraint `tower_number_home_debt_ibfk_2` foreign key (tower_number_home_debt) references debt (tower_number_home)
 );
 
+create table if not exists credential (
+	user varchar(100) not null primary key,
+	password varchar(100) not null,
+    tower_number_home_c varchar (15) not null,
+    KEY tower_number_home_c (tower_number_home_c),
+    constraint `tower_number_home_c_ibfk_1` foreign key (tower_number_home_c) references home (tower_number_home)
+);
+
 create table if not exists type_request (
 	id int (2) not null primary key,
     affair varchar(15) not null

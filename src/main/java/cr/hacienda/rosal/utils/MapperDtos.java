@@ -33,6 +33,30 @@ public class MapperDtos {
         return usersDB;
     }
 
+    public static ArrayList<Credential> mapUserDtosToCredentals(ArrayList<UserDto> userDtos){
+        ArrayList<Credential> credentials = new ArrayList<>();
+
+        for(UserDto u: userDtos){
+            credentials.add(getCredentialOfUserDto(u));
+        }
+        return credentials;
+    }
+
+    public static UserDto getUserDtoOfCredential(Credential credential){
+        UserDto userDto = getUserDto(credential.getHome());;
+        userDto.setUser(credential.getUser());
+        userDto.setPassword(credential.getPassword());
+        return userDto;
+    }
+
+    public static Credential getCredentialOfUserDto(UserDto userDto){
+        Credential credential = new Credential();
+        credential.setUser(userDto.getUser());
+        credential.setPassword(userDto.getPassword());
+        credential.setHome(getHome(userDto));
+        return credential;
+    }
+
     public static User getUser(UserDto u){
         logger.info("Inicia mapeo de userDto a User");
         User user = new User();
