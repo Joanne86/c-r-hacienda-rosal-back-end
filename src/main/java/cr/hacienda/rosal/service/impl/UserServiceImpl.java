@@ -1,5 +1,6 @@
 package cr.hacienda.rosal.service.impl;
 
+import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.User;
 import cr.hacienda.rosal.repository.UserRepository;
 import cr.hacienda.rosal.service.IUserService;
@@ -7,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -23,17 +26,17 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void save(User user) {
-        logger.info("Guardando en base de datos del residente");
+
+        logger.info("Guardando en base de datos del residente: {}", user.toString());
         userRepository.save(user);
     }
 
     @Override
-    public User update(User user) {
-        User userReturn = null;
-        logger.info("Inicia actualizacion de user en base de datos");
-        if (userRepository.findByDocumentNumber(user.getDocumentNumber()).isPresent()) {
-            userReturn= userRepository.save(user);
+    public void update(UserDto userDto) {
+        Optional<User> user = userRepository.findByDocumentNumber(userDto.getDocumentNumber());
+        if (user.isPresent()) {
+            user.get().setCellphone(userDto.getCellphone());
+            userRepository.save(user.get());
         }
-        return userReturn;
     }
 }

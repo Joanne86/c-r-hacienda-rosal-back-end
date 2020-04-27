@@ -8,9 +8,8 @@ insert into type_request values (3, 'Peticíon');
 insert into state_request values (1, 'Atendido');
 insert into state_request values (2, 'Sin respuesta');
 
-insert into user values ('123456789', 'Viviana Anacona', '0', 2);
-insert into debt values ('0', 0, 0);
-insert into home values ('0', '123456789', '0');
-insert into credential values ('123456789', '123456789','0');
 
- 
+insert into user values (1, '123456789', 'Viviana Anacona', '0', 2);
+insert into debt values (1, '0', 0, 0);
+insert into home values (1, '0', 1, 1);
+insert into credential values (1, '123456789', '123456789', 1);

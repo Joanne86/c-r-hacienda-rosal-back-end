@@ -26,6 +26,8 @@ public class NotificationController {
     IUserService userService;
     @Autowired
     ILoginService loginService;
+    @Autowired
+    MapperDtos mapperDtos;
 
     /**
      * Metodo que agrega todos los numeros del conjunto residencial a aws SNS y los guarda en base de datos
@@ -36,10 +38,10 @@ public class NotificationController {
     @PostMapping("/add-all-residents")
     public ResponseEntity<Void> addNumbersToGeneralMessage(@RequestBody ArrayList<UserDto> users){
         try{
-            userService.saveAll(MapperDtos.mapUserDtoToUser(users));
-            debtorService.saveAll(MapperDtos.mapUserDtoToDebt(users));
-            homeService.saveAll(MapperDtos.mapHomes(users));
-            loginService.saveAll(MapperDtos.mapUserDtosToCredentals(users));
+            userService.saveAll(mapperDtos.mapUserDtoToUser(users)); // no hay lio
+            debtorService.saveAll(mapperDtos.mapUserDtoToDebt(users));// no hay lio
+            homeService.saveAll(mapperDtos.mapHomes(users)); // no hay lio
+            loginService.saveAll(mapperDtos.mapUserDtosToCredentals(users)); // no hay lio
             //notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
             /*String message = "usted acaba de ser registrado en la aplicación web del conjunto residencial ingrese a este link para acceder -> https://conjunto-hacienda-rosal.com/#/login ingresando su cedula en ambos campos";
             notificationService.sendMessageToAllResidents(message);*/
@@ -47,7 +49,6 @@ public class NotificationController {
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     /**
@@ -93,7 +94,7 @@ public class NotificationController {
     @PostMapping ("/send-message-to-one")
     public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
         try{
-            notificationService.sendMessageToOne(messageDto);
+            //notificationService.sendMessageToOne(messageDto);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

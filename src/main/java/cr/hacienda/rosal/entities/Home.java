@@ -5,15 +5,30 @@ import javax.persistence.*;
 @Entity
 @Table(name="home")
 public class Home {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
+
     @Column(name="tower_number_home")
     private String towerNumberHome;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document_number", referencedColumnName = "document_number")
+    @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tower_number_home_debt", referencedColumnName = "tower_number_home")
+    @JoinColumn(name = "id_debt", referencedColumnName = "id")
     private Debt debt;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTowerNumberHome() {
         return towerNumberHome;

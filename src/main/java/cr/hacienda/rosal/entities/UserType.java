@@ -1,9 +1,6 @@
 package cr.hacienda.rosal.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user_type")
@@ -28,5 +25,13 @@ public class UserType {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    @Override
+    public String toString() {
+        return "UserType{" +
+                "id=" + id +
+                ", rol='" + rol + '\'' +
+                '}';
     }
 }

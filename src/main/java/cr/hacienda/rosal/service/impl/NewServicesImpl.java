@@ -28,11 +28,14 @@ public class NewServicesImpl implements INewService {
     @Autowired
     CommentaryRepository commentaryRepository;
 
+    @Autowired
+    MapperDtos mapperDtos;
+
     @Override
     public void publish(News news){
         logger.info("Guardando publicacion nueva");
 
-        news.setPublish(MapperDtos.getDateString(new Date()));
+        news.setPublish(mapperDtos.getDateString(new Date()));
 
         logger.info("Guardando publicacion: {}", news.toString());
         newRepository.save(news);
@@ -40,7 +43,7 @@ public class NewServicesImpl implements INewService {
 
     @Override
     public Iterable<CommentaryDto> getCommentaries(int idNew) {
-        return MapperDtos.mapCommetaryToCommentaryDtoList(commentaryRepository.findAllByIdNews(idNew));
+        return mapperDtos.mapCommetaryToCommentaryDtoList(commentaryRepository.findAllByIdNews(idNew));
     }
 
     @Override
@@ -68,7 +71,7 @@ public class NewServicesImpl implements INewService {
 
     @Override
     public void saveCommentary(CommentaryDto commentaryDto) {
-        commentaryRepository.save(MapperDtos.getCommentary(commentaryDto));
+        commentaryRepository.save(mapperDtos.getCommentary(commentaryDto));
     }
 
     @Override
@@ -77,7 +80,7 @@ public class NewServicesImpl implements INewService {
         Optional<News> news = newRepository.findById(newsDto.getId());
         if(news.isPresent()){
             news.get().setInformation(newsDto.getInformation());
-            news.get().setPublish(MapperDtos.getDateString(new Date()));
+            news.get().setPublish(mapperDtos.getDateString(new Date()));
             newRepository.save(news.get());
             newsDto.setPublish(news.get().getPublish());
         }

@@ -7,14 +7,18 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @Column (name = "document_number", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
+
+    @Column (name = "document_number")
     private String documentNumber;
     @Column
     private String name;
     @Column
     private String cellphone;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_type", referencedColumnName = "id")
     private UserType userType;
 
@@ -48,5 +52,24 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", cellphone='" + cellphone + '\'' +
+                ", userType=" + userType +
+                '}';
     }
 }

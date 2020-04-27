@@ -11,5 +11,7 @@ public interface ILoginService {
     UserDto getSession(CredentialDto credentialDto) throws Exception;
     void save(Credential credential);
     void saveAll(ArrayList<Credential> credentials);
-
+    Boolean validateUserName(String user);
+    void updateUser(UserDto userDto);
+    Boolean validateDocument(String documentNumber);
 }

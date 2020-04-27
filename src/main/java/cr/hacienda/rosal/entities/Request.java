@@ -1,7 +1,6 @@
 package cr.hacienda.rosal.entities;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "request")
@@ -27,7 +26,7 @@ public class Request {
     private TypeRequest typeRequest;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tower_number_home", referencedColumnName = "tower_number_home")
+    @JoinColumn(name = "id_home", referencedColumnName = "id")
     private Home home;
 
     public int getId() {

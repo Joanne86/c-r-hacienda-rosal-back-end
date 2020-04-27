@@ -9,13 +9,17 @@ public class Commentary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
+
     @Column
     private String message;
+
     @Column (name="publish_date")
     private String publishDate;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "document", referencedColumnName = "document_number" )
+
+    @JoinColumn(name = "id_user_c", referencedColumnName = "id" )
     private User user;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_news", referencedColumnName = "id" )
     private News news;

@@ -5,8 +5,12 @@ import cr.hacienda.rosal.dto.DebtDto;
 import cr.hacienda.rosal.dto.RequestDto;
 import cr.hacienda.rosal.dto.UserDto;
 import cr.hacienda.rosal.entities.*;
+import cr.hacienda.rosal.repository.DebtRepository;
+import cr.hacienda.rosal.repository.HomeRepository;
+import cr.hacienda.rosal.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -19,12 +23,21 @@ public class MapperDtos {
 
     private static Logger logger = LoggerFactory.getLogger(MapperDtos.class);
 
+    @Autowired
+    DebtRepository debtRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    HomeRepository homeRepository;
+
     /**
      * Metodo para mapear los datos que se guardaran en base de datos USER
      * @param users dto a mapear
      * @return lista a guardar en base de datos User
      */
-    public static Iterable<User> mapUserDtoToUser(ArrayList<UserDto> users){
+    public Iterable<User> mapUserDtoToUser(ArrayList<UserDto> users){
 
         ArrayList<User> usersDB = new ArrayList<>();
         for (UserDto u: users) {
@@ -33,7 +46,8 @@ public class MapperDtos {
         return usersDB;
     }
 
-    public static ArrayList<Credential> mapUserDtosToCredentals(ArrayList<UserDto> userDtos){
+    public ArrayList<Credential> mapUserDtosToCredentals(ArrayList<UserDto> userDtos){
+        logger.info("Mapeo de las credenciales");
         ArrayList<Credential> credentials = new ArrayList<>();
 
         for(UserDto u: userDtos){
@@ -42,32 +56,43 @@ public class MapperDtos {
         return credentials;
     }
 
-    public static UserDto getUserDtoOfCredential(Credential credential){
-        UserDto userDto = getUserDto(credential.getHome());;
+    public  UserDto getUserDtoOfCredential(Credential credential){
+        UserDto userDto = getUserDto(credential.getHome());
+        userDto.setIdSession(credential.getId());
         userDto.setUser(credential.getUser());
         userDto.setPassword(credential.getPassword());
         return userDto;
     }
 
-    public static Credential getCredentialOfUserDto(UserDto userDto){
+    public  Credential getCredentialOfUserDto(UserDto userDto){
         Credential credential = new Credential();
         credential.setUser(userDto.getUser());
         credential.setPassword(userDto.getPassword());
-        credential.setHome(getHome(userDto));
+        credential.setHome(getHomeToSave(userDto));
         return credential;
     }
 
-    public static User getUser(UserDto u){
+    public  User getUser(UserDto u){
         logger.info("Inicia mapeo de userDto a User");
-        User user = new User();
 
-        user.setDocumentNumber(u.getDocumentNumber());
+        User user = new User();
         UserType userType = new UserType();
         userType.setId(1);
         userType.setRol(Mapps.getUserType().get(1));
+
+        user.setDocumentNumber(u.getDocumentNumber());
         user.setCellphone(u.getCellphone());
         user.setName(u.getName());
         user.setUserType(userType);
+
+        logger.info("termina mapeo de user id: {}", user.getId());
+        return user;
+    }
+
+    public  User getUserToSave(UserDto u){
+        logger.info("Inicia mapeo de userDto a User");
+        User user = getUser(u);
+        user.setId(userRepository.getIdByDocumentNumber(u.getDocumentNumber()));
         return user;
     }
 
@@ -76,7 +101,7 @@ public class MapperDtos {
      * @param users dto a meapear
      * @return lista de celulares
      */
-    public static ArrayList<String> mapCellphones(ArrayList<UserDto> users){
+    public  ArrayList<String> mapCellphones(ArrayList<UserDto> users){
         ArrayList<String> cellphones = new ArrayList<>();
 
         for (UserDto u: users){
@@ -85,15 +110,32 @@ public class MapperDtos {
         return cellphones;
     }
 
-    public static Iterable<Home> mapHomes(ArrayList<UserDto> users){
+    public  Iterable<Home> mapHomes(ArrayList<UserDto> users){
         ArrayList<Home> homes = new ArrayList<>();
         for (UserDto u: users){
-            homes.add(getHome(u));
+            homes.add(getHomeToFirstSave(u));
         }
         return homes;
     }
 
-    public static Home getHome(UserDto userDto){
+    public  Iterable<Home> mapHomesToSave(ArrayList<UserDto> users){
+        ArrayList<Home> homes = new ArrayList<>();
+        for (UserDto u: users){
+            homes.add(getHomeToSave(u));
+        }
+        return homes;
+    }
+
+    public Home getHomeToSave(UserDto userDto){
+        Home home = new Home();
+        home.setId(homeRepository.getIdByTowerNumberHome(userDto.getTowerNumberHome()));
+        home.setTowerNumberHome(userDto.getTowerNumberHome());
+        home.setUser(getUserToSave(userDto));
+        home.setDebt(getDebtToSave(userDto));
+        return home;
+    }
+
+    public  Home getHome(UserDto userDto){
         Home home = new Home();
         home.setTowerNumberHome(userDto.getTowerNumberHome());
         home.setUser(getUser(userDto));
@@ -101,7 +143,15 @@ public class MapperDtos {
         return home;
     }
 
-    public static Iterable<UserDto> mapUserToUserDto(Iterable<Home> homes){
+    public  Home getHomeToFirstSave(UserDto userDto){
+        Home home = new Home();
+        home.setTowerNumberHome(userDto.getTowerNumberHome());
+        home.setUser(getUserToSave(userDto));
+        home.setDebt(getDebtToSave(userDto));
+        return home;
+    }
+
+    public  Iterable<UserDto> mapUserToUserDto(Iterable<Home> homes){
         ArrayList<UserDto> userDtos = new ArrayList<>();
         for(Home h: homes){
             userDtos.add(getUserDto(h));
@@ -109,9 +159,10 @@ public class MapperDtos {
         return userDtos;
     }
 
-    public static UserDto getUserDto(Home home){
+    public  UserDto getUserDto(Home home){
         UserDto userDto = new UserDto();
 
+        userDto.setIdUser(home.getUser().getId());
         userDto.setTowerNumberHome(home.getTowerNumberHome());
         userDto.setDocumentNumber(home.getUser().getDocumentNumber());
         userDto.setCellphone(home.getUser().getCellphone());
@@ -122,7 +173,7 @@ public class MapperDtos {
         return userDto;
     }
 
-    public static ArrayList<Debt> mapUserDtoToDebt(ArrayList<UserDto> users){
+    public  ArrayList<Debt> mapUserDtoToDebt(ArrayList<UserDto> users){
         ArrayList<Debt> debts = new ArrayList<>();
 
         for (UserDto u: users){
@@ -130,7 +181,13 @@ public class MapperDtos {
         }
         return debts;
     }
-    public static Debt getDebt(UserDto userDto){
+    public  Debt getDebtToSave(UserDto userDto){
+        Debt debt = getDebt(userDto);
+        debt.setId(debtRepository.getIdByTowerNumberHome(userDto.getTowerNumberHome()));
+        return debt;
+    }
+
+    public  Debt getDebt(UserDto userDto){
         Debt debt = new Debt();
         debt.setTowerNumberHome(userDto.getTowerNumberHome());
         debt.setAmount(userDto.getDebt());
@@ -138,7 +195,7 @@ public class MapperDtos {
         return debt;
     }
 
-    public static DebtDto getDebt(Optional<Debt> debt){
+    public  DebtDto getDebt(Optional<Debt> debt){
         DebtDto debtDto = new DebtDto();
         if(debt.isPresent()){
             debtDto.setAmount(debt.get().getAmount());
@@ -148,7 +205,7 @@ public class MapperDtos {
         return debtDto;
     }
 
-    public static Iterable<CommentaryDto> mapCommetaryToCommentaryDtoList(Iterable<Commentary> commentaryList){
+    public  Iterable<CommentaryDto> mapCommetaryToCommentaryDtoList(Iterable<Commentary> commentaryList){
         ArrayList<CommentaryDto> commentaryDtoList = new ArrayList<>();
 
         for (Commentary c: commentaryList){
@@ -157,7 +214,7 @@ public class MapperDtos {
         return commentaryDtoList;
     }
 
-    private static CommentaryDto getCommentaryDto(Commentary commentary){
+    private  CommentaryDto getCommentaryDto(Commentary commentary){
         CommentaryDto commentaryDto = new CommentaryDto();
 
         commentaryDto.setId(commentary.getId());
@@ -169,11 +226,14 @@ public class MapperDtos {
         return commentaryDto;
     }
 
-    public static Commentary getCommentary(CommentaryDto commentaryDto){
+    public  Commentary getCommentary(CommentaryDto commentaryDto){
+
         Commentary commentary = new Commentary();
         commentary.setMessage(commentaryDto.getMessage());
         commentary.setPublishDate(getDateString(new Date()));
+
         User user = new User();
+        user.setId(userRepository.getIdByDocumentNumber(commentaryDto.getDocument()));
         user.setDocumentNumber(commentaryDto.getDocument());
         user.setCellphone(commentaryDto.getCellphone());
         user.setName(commentaryDto.getName());
@@ -195,12 +255,12 @@ public class MapperDtos {
         return commentary;
     }
 
-    public static String getDateString(Date date){
+    public  String getDateString(Date date){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
     }
 
-    public static Iterable<RequestDto> mapRequestDto(Iterable<Request> requestList) {
+    public  Iterable<RequestDto> mapRequestDto(Iterable<Request> requestList) {
         ArrayList<RequestDto> requestDtoList = new ArrayList<>();
         for(Request r: requestList){
             requestDtoList.add(getRequestDto(r));
@@ -208,7 +268,7 @@ public class MapperDtos {
         return requestDtoList;
     }
 
-    public static RequestDto getRequestDto(Request request){
+    public  RequestDto getRequestDto(Request request){
         RequestDto requestDto = new RequestDto();
         requestDto.setId(request.getId());
         requestDto.setMessage(request.getMessage());
@@ -220,11 +280,11 @@ public class MapperDtos {
         return requestDto;
     }
 
-    public static UserDto getUserDto(Request request){
+    public  UserDto getUserDto(Request request){
         return getUserDto(request.getHome());
     }
 
-    public static Request getRequest(RequestDto requestDto) {
+    public  Request getRequest(RequestDto requestDto) {
         logger.info("Comienza mapeo del request");
         Request request = new Request();
         request.setMessage(requestDto.getMessage());
@@ -236,7 +296,7 @@ public class MapperDtos {
         stateRequest.setState(Mapps.getSateRequest().get(2));
         request.setStateRequest(stateRequest);
 
-        request.setHome(getHome(requestDto.getUserDto()));
+        request.setHome(getHomeToSave(requestDto.getUserDto()));
 
         TypeRequest typeRequest = new TypeRequest();
         typeRequest.setId(requestDto.getType());

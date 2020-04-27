@@ -7,13 +7,16 @@ import javax.persistence.*;
 public class Credential {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
     @Column
     private String user;
     @Column
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tower_number_home_c", referencedColumnName = "tower_number_home")
+    @JoinColumn(name = "id_home", referencedColumnName = "id")
     private Home home;
 
     public String getUser() {
@@ -38,5 +41,13 @@ public class Credential {
 
     public void setHome(Home home) {
         this.home = home;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

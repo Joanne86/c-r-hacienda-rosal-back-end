@@ -10,4 +10,7 @@ public interface DebtRepository extends CrudRepository<Debt, Integer> {
 
     @Query("SELECT d FROM Debt d WHERE d.towerNumberHome=?1")
     Optional<Debt> findByTowerNumberHome(String towerNumberHome);
+
+    @Query("SELECT d.id FROM Debt d WHERE d.towerNumberHome=?1")
+    Integer getIdByTowerNumberHome(String towerNumberHome);
 }

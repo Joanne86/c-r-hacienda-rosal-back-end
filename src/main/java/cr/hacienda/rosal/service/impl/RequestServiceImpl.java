@@ -17,14 +17,17 @@ public class RequestServiceImpl implements IRequestService {
     @Autowired
     RequestRepository requestRepository;
 
+    @Autowired
+    MapperDtos mapperDtos;
+
     @Override
         public void sendRequest(RequestDto requestDto) {
-        requestRepository.save(MapperDtos.getRequest(requestDto));
+        requestRepository.save(mapperDtos.getRequest(requestDto));
     }
 
     @Override
     public Iterable<RequestDto> getAllRequest() {
-        return MapperDtos.mapRequestDto(requestRepository.findAll());
+        return mapperDtos.mapRequestDto(requestRepository.findAll());
     }
 
     @Override
@@ -41,6 +44,6 @@ public class RequestServiceImpl implements IRequestService {
 
     @Override
     public Iterable<RequestDto> findAllByTowerNumberHome(String towerNumberHome){
-        return MapperDtos.mapRequestDto(requestRepository.findAllByTowerNumberHome(towerNumberHome));
+        return mapperDtos.mapRequestDto(requestRepository.findAllByTowerNumberHome(towerNumberHome));
     }
 }

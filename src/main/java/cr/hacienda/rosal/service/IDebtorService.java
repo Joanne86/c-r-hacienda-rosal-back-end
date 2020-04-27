@@ -9,5 +9,5 @@ public interface IDebtorService {
     void save(Debt debt);
     Iterable<UserDto> getAllDebtors();
     DebtDto getDebtInfo(String towerNumberHome);
-    Debt update(Debt debt);
+    void update(UserDto userDto);
 }

@@ -5,7 +5,12 @@ import javax.persistence.*;
 @Entity
 @Table(name="debt")
 public class Debt {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
+
     @Column(name="tower_number_home")
     private String towerNumberHome;
     @Column
@@ -15,6 +20,14 @@ public class Debt {
 
     public String getTowerNumberHome() {
         return towerNumberHome;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTowerNumberHome(String towerNumberHome) {

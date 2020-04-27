@@ -31,6 +31,8 @@ public class ResidentController {
     INotificationService notificationService;
     @Autowired
     ILoginService loginService;
+    @Autowired
+    MapperDtos mapperDtos;
 
     @GetMapping("/get-debtors")
     public ResponseEntity<Iterable<UserDto>> getDebtors(){
@@ -40,11 +42,10 @@ public class ResidentController {
     @PostMapping("/save-resident")
     public ResponseEntity<Void> saveResident(@RequestBody UserDto userDto){
         try{
-            userService.save(MapperDtos.getUser(userDto));
-            debtorService.save(MapperDtos.getDebt(userDto));
-            homeService.save(MapperDtos.getHome(userDto));
-            loginService.save(MapperDtos.getCredentialOfUserDto(userDto));
-
+            userService.save(mapperDtos.getUser(userDto));
+            debtorService.save(mapperDtos.getDebt(userDto));
+            homeService.save(mapperDtos.getHomeToFirstSave(userDto));
+            loginService.save(mapperDtos.getCredentialOfUserDto(userDto));
             //notificationService.addNumber(userDto.getCellphone());
             if(userDto.getDebt()>0 && userDto.getMonths()>0){
                 //notificationService.addDebtorNumber(userDto.getCellphone());
@@ -85,8 +86,9 @@ public class ResidentController {
     @PutMapping ("/update")
     public ResponseEntity<Void> updateResident(@RequestBody UserDto userDto){
         try{
-            userService.update(MapperDtos.getUser(userDto));
-            debtorService.update(MapperDtos.getDebt(userDto));
+            userService.update(userDto);
+            debtorService.update(userDto);
+            homeService.update(userDto);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             logger.info("Ocurrio un error al actualizar residente: {}", e.getMessage());

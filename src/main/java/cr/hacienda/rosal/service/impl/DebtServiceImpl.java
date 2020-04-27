@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class DebtServiceImpl implements IDebtorService {
@@ -26,6 +28,9 @@ public class DebtServiceImpl implements IDebtorService {
     @Autowired
     IHomeService homeService;
 
+    @Autowired
+    MapperDtos mapperDtos;
+
     @Override
     public void saveAll(Iterable<Debt> debtors) {
         debtRepository.saveAll(debtors);
@@ -38,22 +43,24 @@ public class DebtServiceImpl implements IDebtorService {
 
     @Override
     public Iterable<UserDto> getAllDebtors() {
-        return MapperDtos.mapUserToUserDto(this.homeRepository.getAllDebtors());
+        return mapperDtos.mapUserToUserDto(this.homeRepository.getAllDebtors());
     }
 
     @Override
     public DebtDto getDebtInfo(String towerNumberHome) {
         logger.info("Obteniendo deuda actual del residente");
-        return MapperDtos.getDebt(debtRepository.findByTowerNumberHome(towerNumberHome));
+        return mapperDtos.getDebt(debtRepository.findByTowerNumberHome(towerNumberHome));
     }
 
     @Override
-    public Debt update(Debt debt) {
-        Debt debtReturn = null;
+    public void update(UserDto userDto) {
+        Optional<Debt> debtReturn = debtRepository.findByTowerNumberHome(userDto.getTowerNumberHome());
         logger.info("Inicia actualizacion de debt en base de datos");
-        if (debtRepository.findByTowerNumberHome(debt.getTowerNumberHome()).isPresent()) {
-            debtReturn= debtRepository.save(debt);
+        if (debtReturn.isPresent()) {
+            debtReturn.get().setTowerNumberHome(userDto.getTowerNumberHome());
+            debtReturn.get().setAmount(userDto.getDebt());
+            debtReturn.get().setMonths(userDto.getMonths());
+            debtRepository.save(debtReturn.get());
         }
-        return debtReturn;
     }
 }

@@ -11,6 +11,8 @@ public class UserDto {
     private float debt;
     private String user;
     private String password;
+    private int idSession;
+    private int idUser;
 
     public String getName() {
         return name;
@@ -83,6 +85,22 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIdSession() {
+        return idSession;
+    }
+
+    public void setIdSession(int idSession) {
+        this.idSession = idSession;
+    }
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     @Override

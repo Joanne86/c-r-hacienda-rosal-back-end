@@ -7,4 +7,5 @@ public interface IHomeService {
     Iterable<UserDto> getAllUsers();
     void saveAll(Iterable<Home> homes);
     void save(Home home);
+    void update(UserDto userDto);
 }

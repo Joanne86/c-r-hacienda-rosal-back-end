@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class HomeServiceImpl implements IHomeService {
 
@@ -17,11 +19,13 @@ public class HomeServiceImpl implements IHomeService {
 
     @Autowired
     HomeRepository homeRepository;
+    @Autowired
+    MapperDtos mapperDtos;
 
     @Override
     public Iterable<UserDto> getAllUsers() {
         logger.info("Obteniendo usuarios de base de datos");
-        return MapperDtos.mapUserToUserDto(homeRepository.findAllResidents());
+        return mapperDtos.mapUserToUserDto(homeRepository.findAllResidents());
     }
 
     @Override
@@ -34,5 +38,14 @@ public class HomeServiceImpl implements IHomeService {
     public void save(Home home) {
         logger.info("Inicia guardado del aparamento");
         homeRepository.save(home);
+    }
+
+    @Override
+    public void update(UserDto userDto) {
+        Optional<Home> home  =homeRepository.getHomeByIdUser(userDto.getIdUser());
+        if(home.isPresent()){
+            home.get().setTowerNumberHome(userDto.getTowerNumberHome());
+            homeRepository.save(home.get());
+        }
     }
 }
