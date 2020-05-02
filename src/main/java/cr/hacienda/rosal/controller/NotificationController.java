@@ -42,9 +42,9 @@ public class NotificationController {
             debtorService.saveAll(mapperDtos.mapUserDtoToDebt(users));// no hay lio
             homeService.saveAll(mapperDtos.mapHomes(users)); // no hay lio
             loginService.saveAll(mapperDtos.mapUserDtosToCredentals(users)); // no hay lio
-            //notificationService.addAllNumbers(MapperDtos.mapCellphones(users));
-            /*String message = "usted acaba de ser registrado en la aplicación web del conjunto residencial ingrese a este link para acceder -> https://conjunto-hacienda-rosal.com/#/login ingresando su cedula en ambos campos";
-            notificationService.sendMessageToAllResidents(message);*/
+            notificationService.addAllNumbers(mapperDtos.mapCellphones(users));
+            String message = "usted acaba de ser registrado en la aplicación web del conjunto residencial ingrese a este link para acceder -> https://conjunto-hacienda-rosal.com/#/login ingresando su cédula en ambos campos";
+            notificationService.sendMessageToAllResidents(message);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,7 +60,7 @@ public class NotificationController {
     @PostMapping ("/add-debtors-numbers")
     public ResponseEntity<Void> addDebtorsNumbers(@RequestBody  ArrayList<UserDto> users){
         try{
-            //notificationService.addDebtorsNumber(MapperDtos.mapCellphones(users));
+            notificationService.addDebtorsNumber(mapperDtos.mapCellphones(users));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,7 +94,7 @@ public class NotificationController {
     @PostMapping ("/send-message-to-one")
     public ResponseEntity<Void> sendMessageToOne(@RequestBody MessageDto messageDto){
         try{
-            //notificationService.sendMessageToOne(messageDto);
+            notificationService.sendMessageToOne(messageDto);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -156,7 +156,6 @@ public class NotificationController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     /**
@@ -171,7 +170,6 @@ public class NotificationController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
     /**
      * Metodo que agrega un numero de telefono de deudor en aws
@@ -186,5 +184,4 @@ public class NotificationController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

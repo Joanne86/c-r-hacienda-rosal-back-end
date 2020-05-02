@@ -46,9 +46,9 @@ public class ResidentController {
             debtorService.save(mapperDtos.getDebt(userDto));
             homeService.save(mapperDtos.getHomeToFirstSave(userDto));
             loginService.save(mapperDtos.getCredentialOfUserDto(userDto));
-            //notificationService.addNumber(userDto.getCellphone());
+            notificationService.addNumber(userDto.getCellphone());
             if(userDto.getDebt()>0 && userDto.getMonths()>0){
-                //notificationService.addDebtorNumber(userDto.getCellphone());
+                notificationService.addDebtorNumber(userDto.getCellphone());
             }
             return new ResponseEntity<>(HttpStatus.OK);
 
